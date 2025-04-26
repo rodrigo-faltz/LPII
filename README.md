@@ -1,15 +1,17 @@
-# LPII
+# ECM252 - Linguagem de Programação II
 
-#### Projeto da Disciplina Linguagem de Programação II
+## Projeto T1 da Disciplina Linguagem de Programação II
 
-###### Membros:
+### Membros do Grupo:
 
-Amanda Carolina Ambrizzi Ramin (22.00721-0)
+- Amanda Carolina Ambrizzi Ramin; 22.00721-0
 
-André Felipe Silva Xavier (22.01339-3)
+- André Felipe Silva Xavier; 22.01339-3
 
-Otto Camargo Kuchkarian (22.00571-4)
+- Rodrigo Fernandes Faltz; 21.01660-7
 
-Rafael Assanti (22.01464-0)
+- Otto Camargo Kuchkarian; 22.00571-4
 
-Rodrigo Fernandes Faltz (21.01660-7)
+- Rafael Assanti; 22.01464-0
+
+---
