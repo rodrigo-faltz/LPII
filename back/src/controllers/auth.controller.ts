@@ -43,7 +43,9 @@ export default class AuthController {
       const token = await this.authService.login({email, password} as UserLoginDTO);
       res.json({ token });
     } catch (error) {
-      // Error handling
+      
+      console.error('Login error: %s', error); // Debugging line
+      res.status(400).json({ message: 'Login error' });
     }
   }
 }
