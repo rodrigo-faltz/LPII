@@ -1,9 +1,10 @@
-// auth.middleware.ts
+// src/middleware/auth.middleware.ts
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt';
+import { CustomRequest } from '../types/types';
 
 export const authenticate = (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {

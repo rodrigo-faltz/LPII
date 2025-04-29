@@ -3,16 +3,20 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "./dist",
+  "moduleResolution": "node",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types",
-      "./src/types"
+      "./src/types"  // Fixed path (removed leading slash)
     ],
-    "types": ["node"],
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true
+    "types": ["express"],
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/types/*"]
+    }
   }
 }

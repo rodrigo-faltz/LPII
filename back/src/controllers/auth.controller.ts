@@ -1,55 +1,46 @@
-// auth.controller.ts
+// src/controllers/auth.controller.ts
 import { Request, Response } from 'express';
 import AuthService from '../services/auth.service';
-import { AppError } from '../types/custom-error';
+import {AppError} from '../types/custom-error';
+import { CustomRequest } from '../types/types';
+import { UserCreateDTO } from '../models/user.model';
+import { UserLoginDTO } from '../models/user.model';
 
 export default class AuthController {
   private authService = new AuthService();
 
-  // Existing registration method
-  async register(req: Request, res: Response) {
+  async getProfile(req: CustomRequest, res: Response) {
     try {
-      const user = await this.authService.register(req.body);
-      res.status(201).json({ id: user.id, username: user.username });
-    } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json({ error: error.message });
-      } else {
-        res.status(500).json({ error: 'Registration failed' });
-      }
-    }
-  }
-
-  // Add login method
-  async login(req: Request, res: Response) {
-    try {
-      const token = await this.authService.login(req.body);
-      res.json({ token });
-    } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json({ error: error.message });
-      } else {
-        res.status(401).json({ error: 'Authentication failed' });
-      }
-    }
-  }
-
-  // Add profile method
-  async getProfile(req: Request, res: Response) {
-    try {
+      // Add type assertion if needed
       if (!req.user) {
         throw new AppError('User not authenticated', 401);
       }
       
-      // Fetch fresh data from database
       const user = await this.authService.getUserProfile(req.user.id);
       res.json(user);
     } catch (error) {
-      if (error instanceof AppError) {
-        res.status(error.statusCode).json({ error: error.message });
-      } else {
-        res.status(500).json({ error: 'Failed to fetch profile' });
-      }
+      // Error handling
+    }
+  }
+
+  async register(req: Request, res: Response) {
+    try {
+      const { username, password, email } = req.body;
+      
+      const newUser = await this.authService.register({username, password, email} as UserCreateDTO);
+      res.status(201).json(newUser);
+    } catch (error) {
+      // Error handling
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { username, password } = req.body;
+      const token = await this.authService.login({username, password} as UserLoginDTO);
+      res.json({ token });
+    } catch (error) {
+      // Error handling
     }
   }
 }

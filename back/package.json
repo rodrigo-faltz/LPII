@@ -1,7 +1,14 @@
 {
     "name": "backend",
     "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
     "main": "src/index.ts",
+    "directories": {
+        "test": "tests"
+    },
     "scripts": {
         "start": "ts-node src/index.ts",
         "dev": "nodemon src/index.ts"
