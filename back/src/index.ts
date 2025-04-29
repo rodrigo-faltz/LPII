@@ -1,26 +1,19 @@
+// index.ts
+
 import express from 'express';
-import cors from 'cors';
+import authRoutes from './routes/auth.routes';
+
+// Initialize express app
 
 const app = express();
-const PORT = 3000; 
 
-
-app.use(cors({ origin: 'http://localhost:5173' }));
-
-
+// Middleware
 app.use(express.json());
 
+// Routes
+app.use('/api/auth', authRoutes);
 
-app.get('/api/data', (req, res) => {
-  res.json({ message: 'Hello from the backend! 🚀' });
-});
-
-
-app.post('/api/user', (req, res) => {
-  const { name } = req.body;
-  res.json({ message: `User ${name} created!` });
-});
-
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+// Start server
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
 });
