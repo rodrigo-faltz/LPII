@@ -33,4 +33,12 @@ export default class UserRepository {
     );
     return (rows as User[])[0] || null;
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const [rows] = await pool.query(
+      'SELECT * FROM users WHERE email = ?',
+      [email]
+    );
+    return (rows as User[])[0] || null;
+  }
 }

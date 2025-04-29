@@ -16,7 +16,7 @@ export default class AuthService {
   }
 
   async login(credentials: UserLoginDTO) {
-    const user = await this.userRepo.findByUsername(credentials.username);
+    const user = await this.userRepo.findByEmail(credentials.email);
     if (!user || !(await comparePasswords(credentials.password, user.password_hash))) {
       throw new Error('Invalid credentials');
     }
