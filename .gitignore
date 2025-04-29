@@ -137,3 +137,4 @@ dist
 
 # Ignorar arquivos de teste TypeScript
 *.test.ts
+*.test.jsx
