@@ -4,18 +4,37 @@ import dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST || 'localhost', 
+  user: process.env.DB_USER || 'appjarvis',
+  password: process.env.DB_PASSWORD || 'batatinha123',
+  database: process.env.DB_NAME || 'JarvisApp',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
+// Create connection to the database
+export async function createConnection() {
+  try {
+    const connection = await pool.getConnection();
+    console.log('Database connected successfully');
+    return connection;
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    throw error;
+  }
+}
+
 export async function connectDatabase() {
+
+  createConnection().catch(err => {
+    console.error('Fatal: Database connection failed', err);
+    process.exit(1);
+  });
+  
   try {
     await pool.getConnection();
+    
     console.log('Database connected successfully');
   } catch (error) {
     console.error('Database connection failed:', error);

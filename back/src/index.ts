@@ -9,6 +9,8 @@ import { loggerMiddleware } from './middleware/logger.middleware';
 
 const app = express();
 
+
+
 // 1. Database Connection
 connectDatabase().catch(err => {
   console.error('Fatal: Database connection failed', err);
