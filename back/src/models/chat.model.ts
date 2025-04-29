@@ -5,7 +5,6 @@
 export interface Chat {
     id: number;
     subject_id: number;
-    message: string;
     user_id: number;
 }
 

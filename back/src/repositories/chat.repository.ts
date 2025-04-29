@@ -37,13 +37,17 @@ export default class ChatRepository {
              
         return updatedChat;
     }
+    //rows.length is not a function
 
-    async getChatById(chatID: number): Promise<ChatResponseDTO | null> {
-        const [rows] = await pool.query(
+    async getChatById(chatId: number): Promise<ChatResponseDTO> {
+        const [rows]: any = await pool.query(
             'SELECT * FROM chats WHERE id = ?',
-            [chatID]
+            [chatId]
         );
-        return (rows as Chat[])[0] || null;
+        if (!Array.isArray(rows) || rows.length === 0) {
+            throw new Error('Chat not found');
+        }
+        return rows[0] as ChatResponseDTO;
     }
 
 
