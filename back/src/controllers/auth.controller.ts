@@ -26,11 +26,14 @@ export default class AuthController {
   async register(req: Request, res: Response) {
     try {
       const { username, password, email } = req.body;
+      console.log('Registering user: %s', username); // Debugging line
+
       
       const newUser = await this.authService.register({username, password, email} as UserCreateDTO);
       res.status(201).json(newUser);
     } catch (error) {
       // Error handling
+      console.log('Error registering user: %s', error); // Debugging line
     }
   }
 
