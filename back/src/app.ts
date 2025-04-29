@@ -6,6 +6,7 @@ import  {connectDatabase}  from './config/db';
 import { errorHandler } from './middleware/error.middleware';
 import { loggerMiddleware } from './middleware/logger.middleware';
 import chatRoutes from './routes/chat.routes';
+import subjectRoutes from './routes/subject.routes';
 const app = express();
 
 // 1. Database Connection
@@ -30,7 +31,8 @@ app.use(loggerMiddleware); // Request logging
 
 // 3. Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/chat', chatRoutes); // Assuming you have a chatRoutes file
+app.use('/api/chat', chatRoutes); 
+app.use('/api/subject', subjectRoutes);
 
 // 4. Health Check Endpoint
 app.get('/api/health', (req, res) => {
