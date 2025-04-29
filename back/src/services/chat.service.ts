@@ -6,9 +6,7 @@ export default class ChatService {
 
   async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
     
-    if (chatData.message.length > 500) {
-      throw new Error('Message too long');
-    }
+    
     return this.chatRepo.createChat(chatData);
   }
 

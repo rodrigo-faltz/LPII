@@ -8,8 +8,8 @@ export default class ChatRepository {
 
     async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
         const [result] = await pool.query(
-            'INSERT INTO chats (message, user_id, subject_id) VALUES (?, ?, ?)',
-            [chatData.message, chatData.user_id, chatData.subject_id]
+            'INSERT INTO chats (user_id, subject_id) VALUES (?, ?)',
+            [ chatData.user_id, chatData.subject_id]
         );
 
         const createdChat = await this.getChatById((result as any).insertId);

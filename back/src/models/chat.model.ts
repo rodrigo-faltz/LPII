@@ -10,7 +10,6 @@ export interface Chat {
 }
 
 export interface ChatCreateDTO {
-    message: string;
     user_id: number;
     subject_id: number;
 }
