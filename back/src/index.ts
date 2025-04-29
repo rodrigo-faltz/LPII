@@ -2,9 +2,10 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
-import { connectDatabase } from './config/db';
+import  {connectDatabase}  from './config/db';
 import { errorHandler } from './middleware/error.middleware';
 import { loggerMiddleware } from './middleware/logger.middleware';
+
 
 const app = express();
 
@@ -14,6 +15,11 @@ connectDatabase().catch(err => {
   process.exit(1);
 });
 
+// Middleware and routes setup
+app.use(express.json());
+app.use('/api', authRoutes);
+
+export default app;
 // 2. Middleware
 app.use(cors({
   origin: 'http://localhost:5173', // Your Vite frontend
