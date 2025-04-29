@@ -63,4 +63,10 @@ export async function initializeTestDatabase() {
   `);
 }
 
+export interface QueryResult<T = any> {
+  affectedRows?: number;
+  insertId?: number;
+  rows: T[];
+}
+
 export default pool;

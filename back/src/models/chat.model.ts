@@ -26,5 +26,5 @@ export interface ChatResponseDTO {
     id: number;
     message: string;
     user_id: number;
-    subject_id?: number;
+    subject_id: number;
 }

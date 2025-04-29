@@ -20,9 +20,9 @@ export default class ChatRepository {
     }
 
 
-    async updateChat(chatId: string, chatData: ChatUpdateDTO): Promise<ChatResponseDTO> {
+    async updateChat(chatId: number, chatData: ChatUpdateDTO): Promise<ChatResponseDTO> {
         const [result] = await pool.query(
-            'INSERT INTO  chats  (message, user_id, subject_id) VALUES (?, ?, ?)',
+            'UPDATE chats SET message = ?, user_id = ?, subject_id = ? WHERE id = ?',
             [chatData.message, chatData.user_id, chatData.subject_id, chatId]
         );
 
@@ -38,17 +38,17 @@ export default class ChatRepository {
         return updatedChat;
     }
 
-    async getChatById(subjectId: string): Promise<ChatResponseDTO | null> {
+    async getChatById(chatID: number): Promise<ChatResponseDTO | null> {
         const [rows] = await pool.query(
             'SELECT * FROM chats WHERE id = ?',
-            [subjectId]
+            [chatID]
         );
         return (rows as Chat[])[0] || null;
     }
 
 
     
-    async deleteChat(chatId: string): Promise<void> {
+    async deleteChat(chatId: number): Promise<void> {
         const [result] = await pool.query(
             'DELETE FROM chats WHERE id = ?',
             [chatId]
@@ -62,7 +62,7 @@ export default class ChatRepository {
         return rows as ChatResponseDTO[];
     }
 
-    async getChatsByUserId(userId: string): Promise<ChatResponseDTO[]> {
+    async getChatsByUserId(userId: number): Promise<ChatResponseDTO[]> {
         const [rows] = await pool.query(
             'SELECT * FROM chats WHERE user_id = ?',
             [userId]
@@ -70,5 +70,12 @@ export default class ChatRepository {
         return rows as ChatResponseDTO[];
     }
 
-    
+    getChatBySubjectId(subjectId: number): Promise<ChatResponseDTO[]> {
+        return pool.query(
+            'SELECT * FROM chats WHERE subject_id = ?',
+            [subjectId]
+        ).then(([rows]) => rows as ChatResponseDTO[]);
+        
+}
+
 }
