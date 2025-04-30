@@ -1,9 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function RegisterForm() {
+  axios.defaults.baseURL = "http://localhost:3000/api";
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -11,6 +20,49 @@ function RegisterForm() {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const handleCadastroSuccess = async () => {
+    // Após cadastro bem-sucedido:
+    navigate('/', {
+      state: {
+        successMessage: 'Cadastro realizado com sucesso. Você pode fazer login agora!',
+      }
+    });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault(); // Previne o recarregamento da página
+
+    try {
+      setLoading(true);
+      if (password !== passwordConfirm) {
+        setResponse("As senhas não coincidem.");
+      } else if (password.length < 8) {
+        setResponse("A senha deve ter pelo menos 8 caracteres.");
+      } else if (username.length < 3) {
+        setResponse("O nome de usuário deve ter pelo menos 3 caracteres.");
+      } else {
+        const res = await axios.post(`/auth/register`, {
+          email,
+          password,
+          username,
+        });
+        const data = await res.data;
+        //setResponse(JSON.stringify(data, null, 2));
+        handleCadastroSuccess();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const mensagemBackend =
+          error.response?.data?.message || "Erro inesperado.";
+        setResponse(`Erro: ${mensagemBackend}`);
+      } else {
+        setResponse("Erro inesperado.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,7 +80,7 @@ function RegisterForm() {
           </p>
         </div>
         <div className="card-body p-4">
-          <form>
+          <form onSubmit={handleRegister}>
             <div className="mb-3">
               <label
                 htmlFor="name"
@@ -44,6 +96,8 @@ function RegisterForm() {
                 placeholder="Seu nome completo"
                 required
                 style={{ borderColor: "#bfdbfe" }}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -62,6 +116,8 @@ function RegisterForm() {
                 placeholder="seu@email.com"
                 required
                 style={{ borderColor: "#bfdbfe" }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -81,6 +137,8 @@ function RegisterForm() {
                   placeholder="Senha"
                   required
                   style={{ borderColor: "#bfdbfe" }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -117,6 +175,8 @@ function RegisterForm() {
                   placeholder="Senha"
                   required
                   style={{ borderColor: "#bfdbfe" }}
+                  value={passwordConfirm}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
                 />
                 <button
                   type="button"
@@ -182,6 +242,11 @@ function RegisterForm() {
               </Link>
             </div>
           </form>
+          {response && (
+            <div className="mt-3 p-3 bg-light rounded">
+              <pre>{response}</pre>
+            </div>
+          )}
         </div>
       </div>
     </>
