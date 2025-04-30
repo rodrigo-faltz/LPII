@@ -1,11 +1,44 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function LoginForm() {
+  axios.defaults.baseURL = "http://localhost:3000/api";
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Previne o recarregamento da página
+
+    try {
+      setLoading(true);
+      const res = await axios.post(`/auth/login`, {
+        email,
+        password,
+      });
+      const data = await res.data;
+      //setResponse(JSON.stringify(data, null, 2));
+      localStorage.setItem("token", data.token);
+      //setResponse("Login realizado com sucesso! Redirecionando...");
+      window.location.href = "/home";
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const mensagemBackend =
+          error.response?.data?.message || "Erro inesperado.";
+        setResponse(`Erro: ${mensagemBackend}`);
+      } else {
+        setResponse("Erro inesperado.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -23,7 +56,7 @@ function LoginForm() {
           </p>
         </div>
         <div className="card-body p-4">
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="mb-3">
               <label
                 htmlFor="email"
@@ -39,6 +72,8 @@ function LoginForm() {
                 placeholder="seu@email.com"
                 required
                 style={{ borderColor: "#bfdbfe" }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -60,6 +95,8 @@ function LoginForm() {
                   placeholder="Senha"
                   required
                   style={{ borderColor: "#bfdbfe" }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -81,8 +118,9 @@ function LoginForm() {
               type="submit"
               className="btn w-100 mt-2 fw-medium py-2"
               style={{ backgroundColor: "#2563eb", color: "white" }}
+              disabled={loading}
             >
-              Entrar
+              {loading ? "Carregando..." : "Entrar"}
             </button>
 
             <div className="text-center mt-4">
@@ -96,6 +134,11 @@ function LoginForm() {
               </Link>
             </div>
           </form>
+          {response && (
+            <div className="mt-3 p-3 bg-light rounded">
+              <pre>{response}</pre>
+            </div>
+          )}
         </div>
       </div>
     </>
