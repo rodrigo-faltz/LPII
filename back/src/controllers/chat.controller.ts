@@ -18,7 +18,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: createChat' });
             }
         }
     }
@@ -32,7 +32,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getChatById' });
             }
         }
     }
@@ -61,7 +61,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: deleteChat' });
             }
         }
     }
@@ -74,7 +74,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getAllChats' });
             }
         }
     }
@@ -88,7 +88,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getChatsByUserId' });
             }
         }
     }
@@ -102,7 +102,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getChatsBySubjectId' });
             }
         }
     }
