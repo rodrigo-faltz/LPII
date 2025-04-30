@@ -1,14 +1,23 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function LoginForm() {
   axios.defaults.baseURL = "http://localhost:3000/api";
+  const location = useLocation();
+  const [successMessage, setSuccessMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
+
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      window.history.replaceState({}, "");
+    }
+  }, [location]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -56,6 +65,9 @@ function LoginForm() {
           </p>
         </div>
         <div className="card-body p-4">
+          {successMessage && (
+            <div className="alert alert-success mb-4">{successMessage}</div>
+          )}
           <form onSubmit={handleLogin}>
             <div className="mb-3">
               <label
