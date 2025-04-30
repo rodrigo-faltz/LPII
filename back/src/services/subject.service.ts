@@ -10,6 +10,7 @@ export default class SubjectService {
     }
 
     async updateSubject(subjectId: number, subjectData: SubjectUpdateDTO): Promise<SubjectUpdateDTO> {
+        console.log('Passa no serviço', subjectId); // Debugging line
         return this.subjectRepo.updateSubject(subjectId, subjectData);
     }
 

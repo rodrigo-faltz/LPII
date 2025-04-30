@@ -34,7 +34,6 @@ export default class SubjectRepository {
         if (!updatedSubject) {
             throw new Error('Subject not found after update');
         }
-
         return updatedSubject;
     }
 

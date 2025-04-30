@@ -28,6 +28,9 @@ export default class SubjectController {
     async getSubjectById(req: CustomRequest, res: Response) {
         try {
             const subjectId = parseInt(req.params.id, 10);
+            if (isNaN(subjectId)) {
+                return res.status(400).json({ message: 'Invalid subject ID' });
+            }
             const subject = await this.subjectService.getSubjectById(subjectId);
             res.json(subject);
         } catch (error) {
@@ -42,8 +45,13 @@ export default class SubjectController {
     async updateSubject(req: CustomRequest, res: Response) {
         try {
             const subjectId = parseInt(req.params.id, 10);
+            console.log('Subject ID:', subjectId); // Debugging line
             const subjectData: SubjectUpdateDTO = req.body;
+            console.log('Subject Data:', subjectData); // Debugging line
             const updatedSubject = await this.subjectService.updateSubject(subjectId, subjectData);
+            if (!updatedSubject) {
+                return res.status(404).json({ message: 'Subject not found' });
+            }
             res.json(updatedSubject);
         } catch (error) {
             if (error instanceof AppError) {

@@ -9,6 +9,9 @@ const subjectController = new SubjectController();
 // Create subject
 router.post("/", authenticate, subjectController.createSubject.bind(subjectController));
 
+// Update subject by ID
+router.post("/:id", authenticate, subjectController.updateSubject.bind(subjectController));
+
 // Get subject by ID
 router.get("/:id", authenticate, subjectController.getSubjectById.bind(subjectController));
 
