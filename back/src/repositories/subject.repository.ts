@@ -9,8 +9,8 @@ import { SubjectListDTO } from '../models/subject.model';
 export default class SubjectRepository {
     async createSubject(subjectData: SubjectCreateDTO): Promise<Subject> {
         const [result] = await pool.query(
-            'INSERT INTO subjects (name, description) VALUES (?, ?)',
-            [subjectData.name, subjectData.description]
+            'INSERT INTO subjects (name, description, image_link) VALUES (?, ?, ?)',
+            [subjectData.name, subjectData.description, subjectData.image_link]
         );
 
         const createdSubject = await this.getSubjectById((result as any).insertId);
@@ -22,8 +22,8 @@ export default class SubjectRepository {
 
     async updateSubject(subjectId: number, subjectData: SubjectUpdateDTO): Promise<Subject> {
         const [result] = await pool.query(
-            'UPDATE subjects SET name = ?, description = ? WHERE id = ?',
-            [subjectData.name, subjectData.description, subjectId]
+            'UPDATE subjects SET name = ?, description = ?, image_link = ? WHERE id = ?',
+            [subjectData.name, subjectData.description, subjectData.image_link, subjectId]
         );
 
         if ((result as any).affectedRows === 0) {
