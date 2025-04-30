@@ -9,7 +9,7 @@ export function errorHandler(
   console.error(`[${new Date().toISOString()}] Error:`, err);
   res.status(500).json({
     error: process.env.NODE_ENV === 'production' 
-      ? 'Internal Server Error' 
+      ? 'Erro interno do servidor' 
       : err.message
   });
 }

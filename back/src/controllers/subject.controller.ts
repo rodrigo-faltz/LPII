@@ -20,7 +20,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: createSubject' });
             }
         }
     }
@@ -34,7 +34,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getSubjectById' });
             }
         }
     }
@@ -49,7 +49,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: updateSubject' });
             }
         }
     }
@@ -63,7 +63,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: deleteSubject' });
             }
         }
     }
@@ -76,7 +76,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getAllSubjects' });
             }
         }
     }
@@ -90,7 +90,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getSubjectsByUserId' });
             }
         }
     }
@@ -104,7 +104,7 @@ export default class SubjectController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Internal server error' });
+                res.status(500).json({ message: 'Erro interno do servidor: getSubjectsByChatId' });
             }
         }
     }

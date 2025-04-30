@@ -13,13 +13,19 @@ export default class AuthController {
     try {
       // Add type assertion if needed
       if (!req.user) {
-        throw new AppError('User not authenticated', 401);
+        throw new AppError('Usuário não autenticado', 401);
       }
       
       const user = await this.authService.getUserProfile(req.user.id);
       res.json(user);
     } catch (error) {
       // Error handling
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ message: error.message });
+      } else {
+        console.error('Error fetching user profile: %s', error); // Debugging line
+        res.status(500).json({ message: 'Erro interno do servidor' });
+      }
     }
   }
 
@@ -45,7 +51,7 @@ export default class AuthController {
     } catch (error) {
       
       console.error('Login error: %s', error); // Debugging line
-      res.status(400).json({ message: 'Login error' });
+      res.status(400).json({ message: 'Usuário ou senha inválidos' });
     }
   }
 }
