@@ -35,3 +35,16 @@ body {
 a {
   transition: color 0.2s ease;
 }
+
+/* Estilo para imagem dos cards*/
+.card-img-large {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-img-small {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
