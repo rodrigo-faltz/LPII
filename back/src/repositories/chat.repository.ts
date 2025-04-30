@@ -8,7 +8,7 @@ export default class ChatRepository {
 
     async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
         const [result] = await pool.query(
-            'INSERT INTO chats (user_id, subject_id) VALUES (?, ?)',
+            'INSERT INTO chat (user_id, subject_id) VALUES (?, ?)',
             [ chatData.user_id, chatData.subject_id]
         );
 
@@ -22,7 +22,7 @@ export default class ChatRepository {
 
     async updateChat(chatId: number, chatData: ChatUpdateDTO): Promise<ChatResponseDTO> {
         const [result] = await pool.query(
-            'UPDATE chats SET message = ?, user_id = ?, subject_id = ? WHERE id = ?',
+            'UPDATE chat SET message = ?, user_id = ?, subject_id = ? WHERE id = ?',
             [chatData.message, chatData.user_id, chatData.subject_id, chatId]
         );
 
@@ -41,7 +41,7 @@ export default class ChatRepository {
 
     async getChatById(chatId: number): Promise<ChatResponseDTO> {
         const [rows]: any = await pool.query(
-            'SELECT * FROM chats WHERE id = ?',
+            'SELECT * FROM chat WHERE id = ?',
             [chatId]
         );
         if (!Array.isArray(rows) || rows.length === 0) {
@@ -54,7 +54,7 @@ export default class ChatRepository {
     
     async deleteChat(chatId: number): Promise<void> {
         const [result] = await pool.query(
-            'DELETE FROM chats WHERE id = ?',
+            'DELETE FROM chat WHERE id = ?',
             [chatId]
         );
         if ((result as any).affectedRows === 0) {
@@ -62,13 +62,13 @@ export default class ChatRepository {
         }
     }
     async getAllChats(): Promise<ChatResponseDTO[]> {
-        const [rows] = await pool.query('SELECT * FROM chats');
+        const [rows] = await pool.query('SELECT * FROM chat');
         return rows as ChatResponseDTO[];
     }
 
     async getChatsByUserId(userId: number): Promise<ChatResponseDTO[]> {
         const [rows] = await pool.query(
-            'SELECT * FROM chats WHERE user_id = ?',
+            'SELECT * FROM chat WHERE user_id = ?',
             [userId]
         );
         return rows as ChatResponseDTO[];
@@ -76,7 +76,7 @@ export default class ChatRepository {
 
     getChatBySubjectId(subjectId: number): Promise<ChatResponseDTO[]> {
         return pool.query(
-            'SELECT * FROM chats WHERE subject_id = ?',
+            'SELECT * FROM chat WHERE subject_id = ?',
             [subjectId]
         ).then(([rows]) => rows as ChatResponseDTO[]);
         
