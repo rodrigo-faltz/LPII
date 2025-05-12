@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import SubjectsSection from "../components/SubjectsSection";
 import axios from "axios";
 
-class Dashboard extends React.Component {
+class Explore extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,4 +75,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+export default Explore;
