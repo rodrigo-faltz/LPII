@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import { login } from "../services/auth";
 
 function LoginForm() {
   axios.defaults.baseURL = "http://localhost:3000/api";
@@ -34,7 +35,7 @@ function LoginForm() {
       });
       const data = await res.data;
       //setResponse(JSON.stringify(data, null, 2));
-      localStorage.setItem("token", data.token);
+      login(data.token);
       //setResponse("Login realizado com sucesso! Redirecionando...");
       window.location.href = "/home";
     } catch (error) {
