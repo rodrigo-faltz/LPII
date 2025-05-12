@@ -48,3 +48,18 @@ a {
   height: 120px;
   object-fit: cover;
 }
+
+.sidebar-container {
+  width: 280px !important; /* Largura fixa */
+  min-height: 100vh;
+  background-color: #f8f9fa !important; /* Cor de fundo cinza */
+}
+
+.nav-link {
+  transition: none !important; /* Remove transição */
+}
+
+.nav-link.active {
+  background-color: #e9ecef !important; /* Cor de fundo do item ativo */
+  border-radius: 0.375rem;
+}
