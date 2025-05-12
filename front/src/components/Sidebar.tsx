@@ -26,7 +26,7 @@ const Sidebar = ({ activeNav, setActiveNav }: SidebarProps) => {
             {navItems.map((item) => (
               <li className="nav-item" key={item.id}>
                 <Link
-                  to={`/dashboard/${item.id === "inicio" ? "" : item.id}`}
+                  to={`/home/${item.id === "inicio" ? "" : item.id}`}
                   className={`nav-link d-flex align-items-center py-2 ${
                     activeNav === item.id ? "active text-primary" : "text-dark"
                   }`}
