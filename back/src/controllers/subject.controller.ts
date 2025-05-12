@@ -3,10 +3,7 @@ import {AppError} from '../types/custom-error';
 import {CustomRequest} from '../types/types';
 import {SubjectCreateDTO, SubjectUpdateDTO} from '../models/subject.model';
 import SubjectService from '../services/subject.service';
-import {SubjectListDTO} from '../models/subject.model';
-import {SubjectDeleteDTO} from '../models/subject.model';
 
-import { Subject } from '../models/subject.model';
 
 export default class SubjectController {
     private subjectService = new SubjectService();

@@ -7,6 +7,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { loggerMiddleware } from './middleware/logger.middleware';
 import chatRoutes from './routes/chat.routes';
 import subjectRoutes from './routes/subject.routes';
+import messageRoutes from './routes/message.routes';
 const app = express();
 
 // 1. Database Connection
@@ -17,6 +18,9 @@ connectDatabase().catch(err => {
 
 // Middleware and routes setup
 app.use(express.json());
+app.use('/api/chat', chatRoutes);
+app.use('/api/subject', subjectRoutes);
+app.use('/api/message', messageRoutes);
 app.use('/api', authRoutes);
 
 export default app;
@@ -33,6 +37,8 @@ app.use(loggerMiddleware); // Request logging
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/subject', subjectRoutes);
+app.use('/api/message', messageRoutes);
+
 
 // 4. Health Check Endpoint
 app.get('/api/health', (req, res) => {
