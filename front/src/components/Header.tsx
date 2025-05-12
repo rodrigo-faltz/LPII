@@ -1,45 +1,36 @@
-import { Link } from "react-router-dom";
-import React from "react";
+import { Dropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../services/auth";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <header className="d-flex justify-content-end p-3 border-bottom">
-      <div className="dropdown">
-        <button
-          className="btn btn-link text-decoration-none p-0 dropdown-toggle d-flex align-items-center"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
+      <Dropdown>
+        <Dropdown.Toggle
+          variant="link"
+          id="dropdown-profile"
+          className="text-decoration-none p-0 d-flex align-items-center"
         >
           <img
-            src="/placeholder.svg?height=40&width=40"
+            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
             alt="Perfil"
             className="rounded-circle"
             width="40"
             height="40"
           />
-        </button>
-        <ul className="dropdown-menu dropdown-menu-end">
-          <li>
-            <Link to="/perfil" className="dropdown-item">
-              Meu Perfil
-            </Link>
-          </li>
-          <li>
-            <Link to="/configuracoes" className="dropdown-item">
-              Configurações
-            </Link>
-          </li>
-          <li>
-            <hr className="dropdown-divider" />
-          </li>
-          <li>
-            <Link to="/" className="dropdown-item">
-              Sair
-            </Link>
-          </li>
-        </ul>
-      </div>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className="dropdown-menu-end">
+          <Dropdown.Item onClick={handleLogout}>Sair</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </header>
   );
 };
