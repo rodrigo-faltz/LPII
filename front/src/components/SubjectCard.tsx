@@ -1,17 +1,20 @@
-import React from "react";
-
 interface SubjectCardProps {
   title: string;
-  imageUrl: string;
+  image_link: string;
   size?: "small" | "large";
 }
 
-const SubjectCard = ({ title, imageUrl, size = "large" }: SubjectCardProps) => {
-
+const SubjectCard = ({ title, image_link, size = "large" }: SubjectCardProps) => {
   return (
-    <div className="card h-100 border-0 shadow-sm">
+    <div
+      className="card h-100 border-0 shadow-sm"
+      onClick={() => {
+        localStorage.setItem("clickedSubject", title);
+        window.location.href = `/subject/${title}`;
+      }}
+    >
       <img
-        src={imageUrl}
+        src={image_link}
         alt={title}
         className={`card-img-top card-img-${size}`}
       />
