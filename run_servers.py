@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import time
+import os
 from threading import Thread
 
 def run_command(command, cwd):
@@ -19,10 +20,13 @@ def run_command(command, cwd):
         process.terminate()
 
 if __name__ == "__main__":
-    # Define commands and directories
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Define commands and directories using absolute paths
     commands = [
-        {'command': 'npm run dev', 'cwd': 'back'},
-        {'command': 'npm run dev', 'cwd': 'front'}
+        {'command': 'npm run dev', 'cwd': os.path.join(script_dir, 'back')},
+        {'command': 'npm run dev', 'cwd': os.path.join(script_dir, 'front')}
     ]
 
     # Create and start threads
