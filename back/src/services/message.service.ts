@@ -1,9 +1,9 @@
-import MessageRepository from "@/repositories/message.repository";
-import { MessageCreateDTO} from "@/models/message.model";
-import { MessageUpdateDTO } from "@/models/message.model";
-import { MessageDeleteDTO } from "@/models/message.model";
-import { MesssageGetByChatIdDTO } from "@/models/message.model";
-import { Message } from "@/models/message.model";
+import MessageRepository from "../repositories/message.repository";
+import { MessageCreateDTO} from "../models/message.model";
+import { MessageUpdateDTO } from "../models/message.model";
+import { MessageDeleteDTO } from "../models/message.model";
+import { MesssageGetByChatIdDTO } from "../models/message.model";
+import { Message } from "../models/message.model";
 
 export default class MessageService {
     constructor(private messageRepo: MessageRepository = new MessageRepository()) {}

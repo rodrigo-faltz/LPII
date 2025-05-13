@@ -1,4 +1,4 @@
-import pool from '@/config/db';
+import pool from '../config/db';
 import { Message } from '../models/message.model';
 import { MessageCreateDTO } from '../models/message.model';
 import { MessageUpdateDTO } from '../models/message.model';

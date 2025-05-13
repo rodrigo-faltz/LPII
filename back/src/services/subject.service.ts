@@ -1,5 +1,5 @@
 import SubjectRepository from "../repositories/subject.repository";
-import { SubjectCreateDTO, SubjectUpdateDTO, SubjectDeleteDTO, SubjectListDTO } from "@/models/subject.model";
+import { SubjectCreateDTO, SubjectUpdateDTO, SubjectDeleteDTO, SubjectListDTO } from "../models/subject.model";
 
 export default class SubjectService {
 
