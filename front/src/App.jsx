@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "./services/AuthContext";
+import { Navigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
