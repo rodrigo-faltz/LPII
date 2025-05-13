@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import History from "./pages/History";
+import Chat from "./pages/Chat";
 
 const PrivateRoute = ({ children }) => {
   const { authenticated } = useAuth();
@@ -42,6 +43,14 @@ function App() {
             element={
               <PrivateRoute>
                 <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <PrivateRoute>
+                <Chat />
               </PrivateRoute>
             }
           />
