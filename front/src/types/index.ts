@@ -1,6 +1,6 @@
 export type Chat = {
   id: string;
-  titulo: string;
+  titulo?: string;
   materia: string;
   dataHora: string;
   ultimaMensagem: string;
