@@ -55,6 +55,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/home/chat/:id"
+            element={
+              <PrivateRoute>
+                <Chat />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
