@@ -1,40 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatMain from "../components/ChatMain";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
 export default function Home() {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      content: "Preciso de ajuda com equação de primeiro grau",
-      sender: "user",
-      timestamp: "01/04/2025 9:41",
-    },
-    {
-      id: 2,
-      content:
-        "De que forma você prefere para estudar esse conteúdo? Mais interativo ou em formato de aula?",
-      sender: "assistant",
-      timestamp: "01/04/2025 9:42",
-    },
-    {
-      id: 3,
-      content: "Prefiro de uma forma mais interativa",
-      sender: "user",
-      timestamp: "01/04/2025 9:43",
-    },
-    {
-      id: 4,
-      content:
-        "Vou gerar alguns cards para você interagir de acordo com o conteúdo de equação de primeiro grau",
-      sender: "assistant",
-      timestamp: "01/04/2025 9:44",
-    },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      const initialMessage = {
+        id: 1,
+        content: "Olá! Como posso ajudar você hoje?",
+        sender: "assistant",
+        timestamp: new Date().toLocaleString("pt-BR"),
+      };
+      setMessages([initialMessage]);
+    }
+  }, []);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
