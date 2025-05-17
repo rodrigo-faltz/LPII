@@ -33,6 +33,7 @@ class Header extends React.Component<{}, HeaderState> {
       this.setState({ loading: true });
       const res = await axios.get(`/auth/profile`);
       this.setState({ username: res.data.username });
+      localStorage.setItem("userId", res.data.id);
     } catch (error) {
       this.setState({
         error: axios.isAxiosError(error)
