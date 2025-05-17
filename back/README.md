@@ -1,4 +1,3 @@
-# ECM252 – Linguagens de Programação II
 # ECM516 – Arquitetura de Sistemas Computacionais
 
 ## Documentação Back-end
@@ -7,14 +6,51 @@
 1. [Descrição](#descrição)
 2. [Diretório](#diretório)
 3. [Arquivos Importantes](#arquivos-importantes)
-    - [index.ts](#indexts)
-    - [app.ts](#appts)
-    - [db.ts](#dbts)
+    - [controllers/](#controllers)
+        - [auth.controller.ts](#authcontrollerts)
+        - [chat.controller.ts](#chatcontrollerts)
+        - [message.controller.ts](#messagecontrollerts)
+        - [subject.controller.ts](#subjectcontrollerts)
+    - [middleware/](#middleware)
+        - [auth.middleware.ts](#authmiddlewarets)
+        - [error.middleware.ts](#errormiddlewarets)
+        - [logger.middleware.ts](#loggermiddlewarets)
+    - [models/](#models)
+        - [chat.model.ts](#chatmodelts)
+        - [message.models.ts](#messagemodelsts)
+        - [subject.model.ts](#subjectmodelts)
+        - [user.model.ts](#usermodelts)
+    - [repositories/](#repositories)
+        - [chat.repository.ts](#chatrepositoryts)
+        - [message.repository.ts](#messagerepositoryts)
+        - [subject.repository.ts](#subjectrepositoryts)
+        - [user.repository.ts](#userrepositoryts)
+    - [routes/](#routes)
+        - [auth.routes.ts](#authroutests)
+        - [chat.routes.ts](#chatroutests)
+        - [message.routes.ts](#messageroutests)
+        - [subject.routes.ts](#subjectroutests)
+    - [services/](#services)
+        - [auth.services.ts](#authservicests)
+        - [chat.services.ts](#chatservicests)
+        - [message.services.ts](#messageservicests)
+        - [subject.services.ts](#subjectservicests)
+    - [utils/](#utils)
+        - [bcrypt.ts](#bcryptts)
+        - [jwt.ts](#jwtts)
+        - [validation/auth.validator.ts](#authvalidatorts)
+    - [types/](#types)
+        - [auth-types.ts](#authtypests)
+        - [custom-error.ts](#customerrorts)
+        - [types.d.ts](#typesdts)
+    - [test/](#test)
+        - [test-server.ts](#testserverts)
+    - [tests/](#tests)
+        - [integration/routes/auth.routes.test.ts](#authroutestestts)
+        - [unit/services/auth.services.test.ts](#authservicestestts)
 
 ---
-## Descrição
 
----
 ## Diretório
 <pre>
 back/
@@ -80,9 +116,9 @@ back/
 
 ---
 
-## Arquivos Importantes
+# Arquivos Importantes
 
-## index.ts
+## src/index.ts
 
 Este arquivo e o ponto de entrada principal da aplicação. Ele é responsável por inicializar
 o servidor da aplicação. Ele importa o módulo principal (`app`) e o executa, escutando na porta 
@@ -107,18 +143,18 @@ process.on('SIGTERM', () => {
 });
 ```
 
-### Funcionalidades
+## Funcionalidades
 - Inicializa o servidor com base na configuração do app.ts.
 - Utiliza `process.env.PORT` para definir a porta.
 - Imprime uma mensagem de sucesso ao subir o servidor.
-- Gerencia o encerramento correto da aplicação com server.close() em caso de sinal `SIGTERM` e imprime uma mensagem.
+- Gerencia o encerramento correto da aplicação com `server.close()` em caso de sinal `SIGTERM` e imprime uma mensagem.
 
 ---
 
-## app.ts
+## src/app.ts
 
-Este arquivo configura e prepara o servidor Express para o funcionamento. Ele define a conexao com o banco de dados, aplica `Middlewares` importantes, registra rotas principais e 
-define tratamento centralizado de erros.
+Este arquivo configura e prepara o servidor Express para o funcionamento. Ele define a conexao com o banco de dados, 
+aplica `Middlewares` importantes, registra rotas principais e define tratamento centralizado de erros.
 
 ```TypeScript
 // app.ts
@@ -176,17 +212,17 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 ```
 
-### Funcionalidades
+## Funcionalidades
 - Conecta ao banco de dados via `connectDatabase()` e encerra o processo em caso de falha.
-- Aplica Middleware e para converter automaticamente o corpo das requisições.
-- Habilita `CORS` para permitir chamadas da aplicação front-end.
-- Define as rotas principais da API.
-- Cria um `endpoint` de verificação de saúde da API.
-- Aplica Middleware global de tratamento de erros.
+- Aplica `Middleware` e para converter automaticamente o corpo das requisições.
+- Habilita `CORS` para permitir chamadas da aplicação `Front-end`.
+- Define as rotas principais da `API`.
+- Cria um `endpoint` de verificação de saúde da `API`.
+- Aplica `Middleware` global de tratamento de erros.
 
 ---
 
-## db.ts
+## src/config/db.ts
 
 Este arquivo gerencia a conexão com o banco de dados `MySQL` utilizando `mysql2/promise`. Ele configura um pool de conexões, trata falhas críticas de conexão, e inclui funções auxiliares para testes e inicialização do banco.
 
@@ -265,7 +301,7 @@ export interface QueryResult<T = any> {
 export default pool;
 ```
 
-#### Funcionalidades
+### Funcionalidades
 - Configura um `pool` de conexões com base nas variáveis de ambiente:
 - Cria uma conexão individual com o banco (usado internamente):
 - Estabelece conexão e encerra o processo se falhar — usada na inicialização da aplicação.
@@ -274,3 +310,238 @@ export default pool;
 - Exporta `pool` como default para uso nas outras partes da aplicação.
 
 ---
+
+## src/controllers/auth.controllers.ts
+
+O arquivo `auth.controllers.ts` eh responsavel por gerenciar as requisicoes `HTTPS` relacionadas a autenticacao de usuarios, 
+como *login*, *registro* e *recuperacao do perfil*. Ele atua como um intermediario entre as rotas e o servico de autenticacao 
+(AuthService), organizando o fluxo de entrada e saida de dados da `API`.
+
+```TypeScript
+// src/controllers/auth.controller.ts
+import { Request, Response } from 'express';
+import AuthService from '../services/auth.service';
+import {AppError} from '../types/custom-error';
+import { CustomRequest } from '../types/types';
+import { UserCreateDTO } from '../models/user.model';
+import { UserLoginDTO } from '../models/user.model';
+
+export default class AuthController {
+  private authService = new AuthService();
+
+  async getProfile(req: CustomRequest, res: Response) {
+    try {
+      // Add type assertion if needed
+      if (!req.user) {
+        throw new AppError('Usuário não autenticado', 401);
+      }
+      
+      const user = await this.authService.getUserProfile(req.user.id);
+      res.json(user);
+    } catch (error) {
+      // Error handling
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ message: error.message });
+      } else {
+        console.error('Error fetching user profile: %s', error); // Debugging line
+        res.status(500).json({ message: 'Erro interno do servidor' });
+      }
+    }
+  }
+
+  async register(req: Request, res: Response) {
+    try {
+      const { username, password, email } = req.body;
+      console.log('Registering user: %s', username); // Debugging line
+
+      
+      const newUser = await this.authService.register({username, password, email} as UserCreateDTO);
+      res.status(201).json(newUser);
+    } catch (error) {
+      // Error handling
+      console.log('Error registering user: %s', error); // Debugging line
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+      const token = await this.authService.login({email, password} as UserLoginDTO);
+      res.json({ token });
+    } catch (error) {
+      
+      console.error('Login error: %s', error); // Debugging line
+      res.status(400).json({ message: 'Usuário ou senha inválidos' });
+    }
+  }
+}
+```
+
+### Funcionalidades
+- Retorna dados do usuario autenticado.
+- Registra novo usuarios
+- Autentica usuario e retorna `JWT`.
+
+---
+
+## src/controllers/chat.controllers.ts
+
+```TypeScript
+import {Request, Response} from 'express';
+import ChatService from '../services/chat.service';
+import { CustomRequest } from '../types/types';
+import { ChatCreateDTO, ChatUpdateDTO } from '../models/chat.model';
+import { AppError } from '../types/custom-error';
+import { ChatResponseDTO } from '../models/chat.model';
+
+
+export default class ChatController {
+    private chatService = new ChatService();
+
+    async createChat(req: Request, res: Response) {
+        try {
+            const chatData: ChatCreateDTO = req.body;
+            const newChat = await this.chatService.createChat(chatData);
+            res.status(201).json(newChat);
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: createChat' });
+            }
+        }
+    }
+
+    async getChatById(req: Request, res: Response) {
+        try {
+            const chatId = parseInt(req.params.id, 10);
+            const chat = await this.chatService.getChatById(chatId);
+            res.json(chat);
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: getChatById' });
+            }
+        }
+    }
+
+    // async updateChat(req: Request, res: Response) {
+    //     try {
+    //         const chatId = parseInt(req.params.id, 10);
+    //         const chatData: ChatUpdateDTO = req.body;
+    //         const updatedChat = await this.chatService.updateChat(chatId, chatData);
+    //         res.json(updatedChat);
+    //     } catch (error) {
+    //         if (error instanceof AppError) {
+    //             res.status(error.statusCode).json({ message: error.message });
+    //         } else {
+    //             res.status(500).json({ message: 'Internal server error' });
+    //         }
+    //     }
+    // }
+
+    async deleteChat(req: Request, res: Response) {
+        try {
+            const chatId = parseInt(req.params.id, 10);
+            await this.chatService.deleteChat(chatId);
+            res.status(204).send();
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: deleteChat' });
+            }
+        }
+    }
+
+    async getAllChats(req: Request, res: Response) {
+        try {
+            const chats = await this.chatService.getAllChats();
+            res.json(chats);
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: getAllChats' });
+            }
+        }
+    }
+
+    async getChatsByUserId(req: Request, res: Response) {
+        try {
+            const userId = parseInt(req.params.userId, 10);
+            const chats = await this.chatService.getChatsByUserId(userId);
+            res.json(chats);
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: getChatsByUserId' });
+            }
+        }
+    }
+
+    async getChatsBySubjectId(req: Request, res: Response) {
+        try {
+            const subjectId = parseInt(req.params.subjectId, 10);
+            const chats = await this.chatService.getChatsBySubjectId(subjectId);
+            res.json(chats);
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Erro interno do servidor: getChatsBySubjectId' });
+            }
+        }
+    }
+
+}
+```
+
+### Funcionalidades
+
+---
+
+## src/controllers/message.controller.ts
+
+```TypeScripts
+```
+
+### Funcionalidades
+
+---
+
+## src/subject.controller.ts
+
+```TypeScripts
+```
+
+### Funcionalidades
+
+---
+
+## src/middleware/auth.middleware.ts
+
+```TypeScript
+```
+
+### Funcionalidades
+
+---
+
+## src/middleware/error.middleware.ts
+
+```TypeScript
+```
+
+### Funcionalidades
+
+---
+
+## src/middleware/logger.middleware.ts
+
+```TypeScript
+```
+
+### Funcionalidades
