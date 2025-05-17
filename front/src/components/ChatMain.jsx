@@ -1,5 +1,3 @@
-import { Mic, SmilePlus, Paperclip } from "lucide-react";
-
 export default function ChatMain({
   messages,
   inputMessage,
@@ -50,11 +48,8 @@ export default function ChatMain({
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <button type="button" className="btn btn-light me-2">
-            <SmilePlus size={18} />
-          </button>
-          <button type="button" className="btn btn-light">
-            <Paperclip size={18} />
+          <button type="submit" className="btn btn-primary">
+            Send
           </button>
         </form>
       </div>
