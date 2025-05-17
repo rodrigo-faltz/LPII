@@ -48,7 +48,7 @@ function App() {
             }
           />
           <Route
-            path="/chat"
+            path="home/chat"
             element={
               <PrivateRoute>
                 <Chat />
