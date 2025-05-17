@@ -27,7 +27,7 @@ type ChatListItemProps = {
 
 const ChatListItem = ({ chat }: ChatListItemProps) => (
   <Link
-    to={`/dashboard/chat/${chat.id}`}
+    to={`/home/chat/${chat.id}`}
     className="list-group-item list-group-item-action p-3 border-bottom"
   >
     <div className="d-flex w-100 justify-content-between align-items-center">
