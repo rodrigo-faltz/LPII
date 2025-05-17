@@ -30,7 +30,7 @@ export const useChatFilters = ({
       const term = searchTerm.toLowerCase();
       result = result.filter(
         (chat) =>
-          chat.titulo.toLowerCase().includes(term) ||
+          chat.titulo?.toLowerCase().includes(term) ||
           chat.ultimaMensagem.toLowerCase().includes(term)
       );
     }
