@@ -16,12 +16,6 @@ connectDatabase().catch(err => {
   process.exit(1);
 });
 
-// Middleware and routes setup
-app.use(express.json());
-app.use('/api/chat', chatRoutes);
-app.use('/api/subject', subjectRoutes);
-app.use('/api/message', messageRoutes);
-app.use('/api', authRoutes);
 
 export default app;
 // 2. Middleware
@@ -34,6 +28,7 @@ app.use(express.json());
 app.use(loggerMiddleware); // Request logging
 
 // 3. Routes
+app.use('/api', authRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/subject', subjectRoutes);
