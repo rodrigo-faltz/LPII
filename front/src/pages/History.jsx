@@ -10,47 +10,74 @@ class History extends React.Component {
     this.state = {
       activeNav: "historico",
       loading: false,
-      response: "",
+      chats: [],
+      error: null,
     };
 
-    // Configuração do Axios
     axios.defaults.baseURL = "http://localhost:3000/api";
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${localStorage.getItem("token")}`;
-
-    this.allChats = [];
   }
 
-  handleChats = async (e) => {
+  fetchChatData = async (chat) => {
     try {
-      const res = await axios.get(
+      const [subjectRes, messagesRes] = await Promise.all([
+        axios.get(`/subject/${chat.subject_id}`),
+        axios.get(`/message/chat/${chat.id}`),
+      ]);
+
+      const messages = messagesRes.data;
+      const lastMessage =
+        messages.length > 0 ? messages[messages.length - 1] : null;
+
+      return {
+        id: chat.id,
+        materia: subjectRes.data.name,
+        dataHora: lastMessage ? lastMessage.created_at : chat.created_at,
+        ultimaMensagem: lastMessage
+          ? lastMessage.content
+          : "Nenhuma mensagem ainda",
+      };
+    } catch (error) {
+      console.error(`Erro ao carregar chat ${chat.id}:`, error);
+      return null;
+    }
+  };
+
+  handleChats = async () => {
+    try {
+      this.setState({ loading: true, error: null });
+      const userChatsRes = await axios.get(
         `/chat/user/${localStorage.getItem("userId")}`
       );
-      const data = res.data;
-      this.allChats = [];
-      this.allChats.push(...data.subject_id);
-      console.log(this.allChats);
+      const chats = userChatsRes.data;
+
+      const chatsData = await Promise.all(
+        chats.map((chat) => this.fetchChatData(chat))
+      );
+
+      const validChats = chatsData.filter((chat) => chat !== null);
+
+      this.setState({ chats: validChats });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const mensagemBackend =
-          error.response?.data?.message || "Erro inesperado.";
-        this.setState({ response: `Erro: ${mensagemBackend}` });
-      } else {
-        this.setState({ response: "Erro inesperado." });
-      }
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || "Erro ao carregar históricos"
+        : "Erro inesperado";
+
+      this.setState({ error: errorMessage });
     } finally {
       this.setState({ loading: false });
     }
   };
 
   componentDidMount() {
-    this.setState({ loading: true });
     this.handleChats();
-    console.log(this.allChats);
   }
 
   render() {
+    const { chats, loading, error } = this.state;
+
     return (
       <div className="container-fluid p-0">
         <div className="row g-0">
@@ -63,7 +90,24 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4">
-              <HistoryChat chats={this.allChats}/>
+              {loading && (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Carregando...</span>
+                  </div>
+                </div>
+              )}
+
+              {error && (
+                <div className="alert alert-danger">
+                  {error} -{" "}
+                  <button onClick={this.handleChats} className="btn btn-link">
+                    Tentar novamente
+                  </button>
+                </div>
+              )}
+
+              {!loading && !error && <HistoryChat chats={chats} />}
             </div>
           </div>
         </div>
