@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
+import HistoryChat from "../components/HistoryChat";
 import Header from "../components/Header";
-import SubjectsSection from "../components/SubjectsSection";
 import axios from "axios";
 
 class History extends React.Component {
@@ -24,10 +24,13 @@ class History extends React.Component {
 
   handleChats = async (e) => {
     try {
-      const res = await axios.get(`/chat/`);
+      const res = await axios.get(
+        `/chat/user/${localStorage.getItem("userId")}`
+      );
       const data = res.data;
       this.allChats = [];
       this.allChats.push(...data.subject_id);
+      console.log(this.allChats);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const mensagemBackend =
@@ -44,11 +47,10 @@ class History extends React.Component {
   componentDidMount() {
     this.setState({ loading: true });
     this.handleChats();
-    //console.log(this.allChats);
+    console.log(this.allChats);
   }
 
   render() {
-    
     return (
       <div className="container-fluid p-0">
         <div className="row g-0">
@@ -61,12 +63,7 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4">
-              <SubjectsSection
-                title="Todos os chats"
-                subjects={this.allChats}
-                size="large"
-                cols={{ default: 1, md: 2, lg: 4 }}
-              />
+              <HistoryChat chats={this.allChats}/>
             </div>
           </div>
         </div>
