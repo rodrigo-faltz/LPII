@@ -20,29 +20,27 @@ export default function Home() {
     }
   }, []);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = (e, sender = 'user') => { // Add sender parameter with default 'user'
     e.preventDefault();
-    if (inputMessage.trim() === "") return;
+    console.log("Parent handleSendMessage called", { sender });
+    const messageContent = e.aiResponse || inputMessage;
+
+      if ((sender === 'user' && inputMessage.trim() === "") || 
+      (sender === 'assistant' && !e.aiResponse)) return;
 
     const newMessage = {
       id: messages.length + 1,
-      content: inputMessage,
-      sender: "user",
+      content: messageContent,
+      sender: sender,
       timestamp: new Date().toLocaleString("pt-BR"),
     };
-
+    
+    console.log("Adding new message:", newMessage);
     setMessages([...messages, newMessage]);
-    setInputMessage("");
 
-    setTimeout(() => {
-      const assistantMessage = {
-        id: messages.length + 2,
-        content: "Entendido! Vou preparar mais conteúdo sobre esse tema.",
-        sender: "assistant",
-        timestamp: new Date().toLocaleString("pt-BR"),
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    }, 1000);
+    if (sender === 'user') {
+      setInputMessage("");
+    }
   };
 
   return (

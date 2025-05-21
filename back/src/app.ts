@@ -8,6 +8,8 @@ import { loggerMiddleware } from './middleware/logger.middleware';
 import chatRoutes from './routes/chat.routes';
 import subjectRoutes from './routes/subject.routes';
 import messageRoutes from './routes/message.routes';
+import ollamaRoutes from './routes/ollama.routes';
+
 const app = express();
 
 // 1. Database Connection
@@ -16,8 +18,6 @@ connectDatabase().catch(err => {
   process.exit(1);
 });
 
-
-export default app;
 // 2. Middleware
 app.use(cors({
   origin: 'http://localhost:5173', // Your Vite frontend
@@ -33,6 +33,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/subject', subjectRoutes);
 app.use('/api/message', messageRoutes);
+app.use('/api/ollama', ollamaRoutes); // AI generation routes
 
 
 // 4. Health Check Endpoint
@@ -46,3 +47,5 @@ app.get('/api/health', (req, res) => {
 
 // 5. Error Handling
 app.use(errorHandler);
+
+export default app;
