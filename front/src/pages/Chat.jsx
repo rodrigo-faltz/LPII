@@ -20,13 +20,13 @@ export default function Home() {
     }
   }, []);
 
-  const handleSendMessage = (e, sender = 'user') => { // Add sender parameter with default 'user'
+  const handleSendMessage = (e, sender = 'user') => {
     e.preventDefault();
     console.log("Parent handleSendMessage called", { sender });
     const messageContent = e.aiResponse || inputMessage;
 
-      if ((sender === 'user' && inputMessage.trim() === "") || 
-      (sender === 'assistant' && !e.aiResponse)) return;
+    if ((sender === 'user' && inputMessage.trim() === "") || 
+        (sender === 'assistant' && !e.aiResponse)) return;
 
     const newMessage = {
       id: messages.length + 1,
@@ -36,7 +36,9 @@ export default function Home() {
     };
     
     console.log("Adding new message:", newMessage);
-    setMessages([...messages, newMessage]);
+    // Use o padrão de atualização funcional para garantir que estamos 
+    // trabalhando com o estado mais recente
+    setMessages(prevMessages => [...prevMessages, newMessage]);
 
     if (sender === 'user') {
       setInputMessage("");
