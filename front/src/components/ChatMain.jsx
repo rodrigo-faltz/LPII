@@ -30,7 +30,6 @@ export default function ChatMain({
 
       const response = await axios.post('http://localhost:3000/api/ollama/generate', {
         prompt: inputMessage,
-        model: 'deepseek-r1:7b'
       });
 
       console.log("ChatMain: AI Response received:", response.data);
