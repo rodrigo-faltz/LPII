@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 export default function ChatMain({
@@ -8,12 +8,13 @@ export default function ChatMain({
   handleSendMessage: parentHandleSendMessage,
 }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const messagesContainerRef = useRef(null);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-  
+
     console.log("Button clicked!", { inputMessage });
-    
+
     if (inputMessage.trim() === "" || isGenerating) {
       console.log("ChatMain: Empty input or already generating, aborting");
       return;
@@ -28,9 +29,12 @@ export default function ChatMain({
       console.log("ChatMain: Attempting to call AI API...");
       setIsGenerating(true);
 
-      const response = await axios.post('http://localhost:3000/api/ollama/generate', {
-        prompt: inputMessage,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/ollama/generate",
+        {
+          prompt: inputMessage,
+        }
+      );
 
       console.log("ChatMain: AI Response received:", response.data);
 
@@ -39,12 +43,11 @@ export default function ChatMain({
       // Add this to messages by simulating a new message event
       const aiMessageEvent = {
         preventDefault: () => {},
-        aiResponse: response.data.response // Pass the AI response in the event object
+        aiResponse: response.data.response, // Pass the AI response in the event object
       };
 
-      parentHandleSendMessage(aiMessageEvent, 'assistant');
+      parentHandleSendMessage(aiMessageEvent, "assistant");
       setIsGenerating(false);
-
     } catch (error) {
       console.error("ChatMain: Error getting AI response:", error);
       setIsGenerating(false);
@@ -53,15 +56,15 @@ export default function ChatMain({
       const errorEvent = { preventDefault: () => {} };
 
       setInputMessage("Desculpe, não consegui processar sua solicitação.");
-      parentHandleSendMessage(errorEvent, 'assistant');
-      setInputMessage('');
+      parentHandleSendMessage(errorEvent, "assistant");
+      setInputMessage("");
     }
   };
 
   const testConnection = async () => {
     try {
       console.log("Testing API connection...");
-      const response = await axios.get('http://localhost:3000/api/health');
+      const response = await axios.get("http://localhost:3000/api/health");
       console.log("API connection successful:", response.data);
       return true;
     } catch (error) {
@@ -72,11 +75,23 @@ export default function ChatMain({
 
   useEffect(() => {
     testConnection();
-  }, []); 
+  }, []);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="chat-messages flex-grow-1 p-3 overflow-auto">
+    <div className="d-flex flex-column h-100 overflow-hidden">
+      <div
+        ref={messagesContainerRef}
+        className="chat-messages flex-grow-1 p-3 overflow-auto"
+        style={{ minHeight: 0 }}
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -110,7 +125,7 @@ export default function ChatMain({
         ))}
       </div>
 
-      <div className="chat-input p-3 border-top">
+      <div className="chat-input p-3 border-top flex-shrink-0">
         <form onSubmit={handleSendMessage} className="d-flex">
           <input
             type="text"
@@ -119,10 +134,18 @@ export default function ChatMain({
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary" disabled={isGenerating}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isGenerating}
+          >
             {isGenerating ? (
               <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 Processando...
               </>
             ) : (

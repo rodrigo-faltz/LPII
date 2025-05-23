@@ -1,66 +1,87 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import ChatMain from "../components/ChatMain";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
-export default function Home() {
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      messages: [],
+      inputMessage: "",
+      activeNav: "chat",
+    };
+  }
 
-  useEffect(() => {
-    if (messages.length === 0) {
+  componentDidMount() {
+    if (this.state.messages.length === 0) {
       const initialMessage = {
         id: 1,
         content: "Olá! Como posso ajudar você hoje?",
         sender: "assistant",
         timestamp: new Date().toLocaleString("pt-BR"),
       };
-      setMessages([initialMessage]);
+      this.setState({ messages: [initialMessage] });
     }
-  }, []);
+  }
 
-  const handleSendMessage = (e, sender = 'user') => {
+  handleSendMessage = (e, sender = "user") => {
     e.preventDefault();
     console.log("Parent handleSendMessage called", { sender });
-    const messageContent = e.aiResponse || inputMessage;
+    const messageContent = e.aiResponse || this.state.inputMessage;
 
-    if ((sender === 'user' && inputMessage.trim() === "") || 
-        (sender === 'assistant' && !e.aiResponse)) return;
+    if (
+      (sender === "user" && this.state.inputMessage.trim() === "") ||
+      (sender === "assistant" && !e.aiResponse)
+    )
+      return;
 
     const newMessage = {
-      id: messages.length + 1,
+      id: this.state.messages.length + 1,
       content: messageContent,
       sender: sender,
       timestamp: new Date().toLocaleString("pt-BR"),
     };
-    
-    console.log("Adding new message:", newMessage);
-    // Use o padrão de atualização funcional para garantir que estamos 
-    // trabalhando com o estado mais recente
-    setMessages(prevMessages => [...prevMessages, newMessage]);
 
-    if (sender === 'user') {
-      setInputMessage("");
+    console.log("Adding new message:", newMessage);
+    this.setState((prevState) => ({
+      messages: [...prevState.messages, newMessage],
+    }));
+
+    if (sender === "user") {
+      this.setState({ inputMessage: "" });
     }
   };
 
-  return (
-    <div className="container-fluid vh-100 p-0">
-      <div className="row h-100 g-0">
-        <Sidebar />
-        <div className="col main-content">
-          <Header />
-          <div className="d-flex flex-column">
-            <ChatMain
-              messages={messages}
-              inputMessage={inputMessage}
-              setInputMessage={setInputMessage}
-              handleSendMessage={handleSendMessage}
-            />
+  render() {
+    return (
+      <div className="container-fluid vh-100 p-0 d-flex flex-column">
+        <div className="row g-0 flex-grow-1 overflow-hidden">
+          <Sidebar
+            activeNav={this.state.activeNav}
+            setActiveNav={(newNav) => this.setState({ activeNav: newNav })}
+          />
+          <div className="col d-flex flex-column h-100">
+            <Header />
+            <div className="flex-grow-1 overflow-hidden d-flex flex-column h-100">
+              <div
+                className="flex-grow-1 d-flex flex-column h-100"
+                style={{ padding: "0 1rem" }}
+              >
+                <ChatMain
+                  messages={this.state.messages}
+                  inputMessage={this.state.inputMessage}
+                  setInputMessage={(value) =>
+                    this.setState({ inputMessage: value })
+                  }
+                  handleSendMessage={this.handleSendMessage}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
