@@ -11,7 +11,7 @@ const SubjectCard = ({ id, title, image_link, size = "large" }: SubjectCardProps
       className="card h-100 border-0 shadow-sm"
       onClick={() => {
         localStorage.setItem("clickedSubject", title);
-        window.location.href = `/subject/${id}`;
+        window.location.href = `/home/subject/${id}`;
       }}
     >
       <img
