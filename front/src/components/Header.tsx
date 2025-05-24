@@ -74,8 +74,8 @@ class Header extends React.Component<{}, HeaderState> {
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
               alt="Perfil"
               className="rounded-circle"
-              width="40"
-              height="40"
+              width="35"
+              height="35"
             />
           </Dropdown.Toggle>
 
