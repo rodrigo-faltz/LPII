@@ -23,14 +23,14 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/criar-conta" element={<Register />} />
-          <Route
+          {/* {<Route
             path="/home"
             element={
               <PrivateRoute>
                 <Home />
               </PrivateRoute>
             }
-          />
+          />} */}
           <Route
             path="/home/explorar"
             element={
