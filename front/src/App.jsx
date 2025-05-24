@@ -63,6 +63,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/home/subject/:id"
+            element={
+              <PrivateRoute>
+                <History />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

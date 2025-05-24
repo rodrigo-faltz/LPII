@@ -3,7 +3,7 @@ import React from "react";
 
 interface SubjectsSectionProps {
   title: string;
-  subjects: Array<{ name: string; image_link: string }>;
+  subjects: Array<{ id: number; name: string; image_link: string }>;
   size?: "small" | "large";
   cols?: {
     default: number;
@@ -27,6 +27,7 @@ const SubjectsSection = ({
         {subjects.map((subject, key) => (
           <div className="col" key={key}>
             <SubjectCard
+              id={subject.id}
               title={subject.name}
               image_link={subject.image_link}
               size={size}

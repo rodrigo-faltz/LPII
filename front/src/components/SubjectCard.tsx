@@ -1,16 +1,17 @@
 interface SubjectCardProps {
+  id: number;
   title: string;
   image_link: string;
   size?: "small" | "large";
 }
 
-const SubjectCard = ({ title, image_link, size = "large" }: SubjectCardProps) => {
+const SubjectCard = ({ id, title, image_link, size = "large" }: SubjectCardProps) => {
   return (
     <div
       className="card h-100 border-0 shadow-sm"
       onClick={() => {
         localStorage.setItem("clickedSubject", title);
-        window.location.href = `/subject/${title}`;
+        window.location.href = `/subject/${id}`;
       }}
     >
       <img
