@@ -79,17 +79,17 @@ class History extends React.Component {
     const { chats, loading, error } = this.state;
 
     return (
-      <div className="container-fluid p-0">
-        <div className="row g-0">
+      <div className="container-fluid p-0 vh-100">
+        <div className="row g-0 h-100">
           <Sidebar
             activeNav={this.state.activeNav}
             setActiveNav={(newNav) => this.setState({ activeNav: newNav })}
           />
 
-          <div className="col main-content">
+          <div className="col main-content d-flex flex-column h-100">
             <Header />
 
-            <div className="container-fluid p-4">
+            <div className="container-fluid p-4 flex-grow-1 overflow-auto">
               {loading && (
                 <div className="text-center py-5">
                   <div className="spinner-border text-primary" role="status">
