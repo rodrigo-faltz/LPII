@@ -7,15 +7,15 @@ import { BARRAMENTO } from '../app';
 // Importando o repositório de mensagens
 const messageRepository = new MessageRepository();
 
-const CHAT_QUEUE = 'chat.queue';
+const MESSAGE_QUEUE = 'message.queue';
 const BOT_AUTHOR_ID = 0; // ID fixo para o bot, ajuste conforme seu sistema
 
-async function consumeChatQueue() {
-  await BARRAMENTO.channel.assertQueue(CHAT_QUEUE, { durable: true });
+async function consumeMessageQueue() {
+  await BARRAMENTO.channel.assertQueue(MESSAGE_QUEUE, { durable: true });
 
-  console.log(`[*] Aguardando mensagens na fila ${CHAT_QUEUE}...`);
+  console.log(`[*] Aguardando mensagens na fila ${MESSAGE_QUEUE}...`);
 
-  BARRAMENTO.channel.consume(CHAT_QUEUE, async (msg) => {
+  BARRAMENTO.channel.consume(MESSAGE_QUEUE, async (msg) => {
     if (msg === null) return;
 
     try {
@@ -54,4 +54,4 @@ async function consumeChatQueue() {
   });
 }
 
-consumeChatQueue().catch(console.error);
+consumeMessageQueue().catch(console.error);
