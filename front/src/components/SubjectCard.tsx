@@ -25,7 +25,15 @@ const SubjectCard = ({ id, title, image_link, size = "large" }: SubjectCardProps
         subject_id: id
       });
     
-      window.location.href = `/home/chat/${response.data.id}`;
+      const newChatId = response.data.id;
+
+      await axios.post("http://localhost:3000/api/message", {
+        content: `Olá! Bem-vindo ao chat sobre ${title}. Como posso ajudar você hoje?`,
+        chat_id: Number(newChatId),
+        author_id: 0 // ID 0 para mensagens do assistente
+      });
+
+      window.location.href = `/home/chat/${newChatId}`;
     } catch (error) {
       console.error("Erro ao criar chat:", error);
     }

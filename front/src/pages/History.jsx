@@ -41,7 +41,7 @@ class History extends React.Component {
 
       const messages = messagesRes.data;
       const lastMessage =
-        messages.length > 0 ? messages[0] : null;
+        messages.length > 0 ? messages[1] : null;
 
       return {
         id: chat.id,

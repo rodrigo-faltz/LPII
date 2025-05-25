@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 export default function ChatMain({
   messages,
@@ -179,7 +180,7 @@ export default function ChatMain({
                 message.sender === "user" ? "message-user" : "message-assistant"
               }`}
             >
-              {message.content}
+              <ReactMarkdown>{message.content}</ReactMarkdown>
             </div>
 
             {message.sender === "user" && (

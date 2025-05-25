@@ -91,3 +91,31 @@ a {
 .message-timestamp {
   font-size: 0.75rem;
 }
+
+/* Markdown formatting for assistant messages */
+.message-assistant p {
+  margin-bottom: 0.5rem;
+}
+
+.message-assistant p:last-child {
+  margin-bottom: 0;
+}
+
+.message-assistant ul, .message-assistant ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-assistant pre {
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+}
+
+.message-assistant code {
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.2rem;
+}
