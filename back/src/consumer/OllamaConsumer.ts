@@ -11,6 +11,12 @@ const MESSAGE_QUEUE = 'message.queue';
 const BOT_AUTHOR_ID = 0; // ID fixo para o bot, ajuste conforme seu sistema
 
 async function consumeMessageQueue() {
+
+if (!BARRAMENTO.channel) {
+  throw new Error('BARRAMENTO não inicializado. Certifique-se de chamar BARRAMENTO.connect() antes.');
+}
+
+
   await BARRAMENTO.channel.assertQueue(MESSAGE_QUEUE, { durable: true });
 
   console.log(`[*] Aguardando mensagens na fila ${MESSAGE_QUEUE}...`);
@@ -55,3 +61,5 @@ async function consumeMessageQueue() {
 }
 
 consumeMessageQueue().catch(console.error);
+
+export default consumeMessageQueue;

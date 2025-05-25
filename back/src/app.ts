@@ -2,26 +2,15 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
-import  {connectDatabase}  from './config/db';
+import { connectDatabase } from './config/db';
 import { errorHandler } from './middleware/error.middleware';
 import { loggerMiddleware } from './middleware/logger.middleware';
 import chatRoutes from './routes/chat.routes';
 import subjectRoutes from './routes/subject.routes';
 import messageRoutes from './routes/message.routes';
-import ollamaRoutes from './routes/ollama.routes';
 import { MessageBus } from './core/MessageBus';
-import AuthService from './services/auth.service';
-import ChatService from './services/chat.service';
-import SubjectService from './services/subject.service';
-import MessageService from './services/message.service';
-import MessageRepository from './repositories/message.repository';
-import ChatRepository  from './repositories/chat.repository';
-import SubjectRepository from './repositories/subject.repository';
-import UserRepository from './repositories/user.repository';
 
-
-
-// 1. Initialize MessageBus
+// 1. Inicializa o barramento de mensagens
 const BARRAMENTO = new MessageBus({
   hostname: 'localhost',
   port: 5672,
@@ -29,62 +18,33 @@ const BARRAMENTO = new MessageBus({
   password: 'guest'
 });
 
-// top‐level async IIFE
-(async () => {
-  try {
-    await BARRAMENTO.connect();
-    console.log('Connected to RabbitMQ');
-    await BARRAMENTO.initQueues();
-    await BARRAMENTO.consumeMessageCreated();
-
-  } catch (err) {
-    console.error('Error connecting to RabbitMQ:', err);
-    process.exit(1);
-  }
-  // …then start your server…
-})();
-
-
-
-
-// Export the message bus for use in other modules
-export { BARRAMENTO };
-
-
-
-// 3. Initialize Services
-// Initialize services with the message bus
-// You can also pass the message bus to the services if needed
-
-
+// 2. Inicializa o Express
 const app = express();
 
-
-// 1. Database Connection
+// 3. Conecta ao banco de dados
 connectDatabase().catch(err => {
   console.error('Fatal: Database connection failed', err);
   process.exit(1);
 });
 
-// 2. Middleware
+// 4. Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Your Vite frontend
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use(loggerMiddleware); // Request logging
+app.use(loggerMiddleware);
 
-// 3. Routes
+// 5. Rotas
 app.use('/api', authRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes); 
 app.use('/api/subject', subjectRoutes);
 app.use('/api/message', messageRoutes);
-app.use('/api/ollama', ollamaRoutes); // AI generation routes
 
 
-// 4. Health Check Endpoint
+// 6. Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok',
@@ -93,8 +53,27 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 5. Error Handling
+// 7. Error handling
 app.use(errorHandler);
 
+// 8. Inicialização completa da aplicação
+(async () => {
+  try {
+    await BARRAMENTO.connect();
+    await BARRAMENTO.initQueues();
+    console.log('✅ Conectado ao RabbitMQ');
 
+    // Só agora importa o consumidor, para garantir que o BARRAMENTO está pronto
+    const { default: consumeMessageQueue } = await import('./consumer/OllamaConsumer');
+    await consumeMessageQueue();
+
+    console.log('✅ Fila de mensagens ativa');
+  } catch (err) {
+    console.error('Erro ao inicializar o sistema:', err);
+    process.exit(1);
+  }
+})();
+
+// 9. Exporta o app e o barramento
+export { BARRAMENTO };
 export default app;

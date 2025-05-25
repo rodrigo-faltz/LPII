@@ -134,44 +134,5 @@ async initQueues(): Promise<void> {
     await this.model.close();
   }
 
-   async consumeMessageCreated(): Promise<void> {
-    await this.channel.consume('message.queue', async (msg) => {
-      if (!msg) return;
 
-      const routingKey = msg.fields.routingKey;
-      const content = msg.content.toString();
-
-      if (routingKey === 'message.created') {
-        const payload = JSON.parse(content);
-        const prompt = payload.message;
-
-        console.log('📨 Mensagem recebida do usuário:', prompt);
-
-        try {
-          const resposta = await ollamaService.generateResponse(prompt);
-          console.log('🧠 Resposta do Ollama:', resposta);
-
-          // Aqui você pode publicar a resposta em outra exchange ou salvar no banco
-          const respostaPayload = {
-            chatId: payload.chatId,
-            resposta,
-          };
-
-          await this.channel.publish(
-            'message.exchange',
-            'message.responded',
-            Buffer.from(JSON.stringify(respostaPayload))
-          );
-
-          console.log('📤 Resposta publicada no chat.responded');
-        } catch (err) {
-          console.error('❌ Erro ao gerar resposta com o Ollama:', err);
-        }
-      }
-
-      this.channel.ack(msg);
-    });
-
-    console.log('👂 Consumidor da fila chat.queue iniciado');
-  }
 }
