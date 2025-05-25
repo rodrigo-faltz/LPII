@@ -5,7 +5,7 @@ import { LoadingIndicator } from "./LoadingIndicator";
 import { EmptyState } from "./EmptyState";
 import { useChatFilters } from "./../hooks/useChatFilters";
 
-const HistoricoChats = ({ chats }) => {
+const HistoricoChats = ({ chats, initialFilter = "todas", onDeleteChat }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const {
@@ -17,7 +17,10 @@ const HistoricoChats = ({ chats }) => {
     setSearchTerm,
     setFilterValue,
     setSortValue,
-  } = useChatFilters({ initialChats: [] });
+  } = useChatFilters({
+    initialChats: [],
+    defaultFilter: initialFilter
+  });
 
   const fetchChats = () => {
     if (chats) {
@@ -37,6 +40,13 @@ const HistoricoChats = ({ chats }) => {
     { value: "recentes", label: "Mais recentes" },
     { value: "antigos", label: "Mais antigos" },
   ];
+
+  useEffect(() => {
+    if (initialFilter && initialFilter !== filterValue) {
+      console.log("Atualizando filtro para:", initialFilter);
+      setFilterValue(initialFilter);
+    }
+  }, [initialFilter]);
 
   useEffect(() => {
     fetchChats();
@@ -66,6 +76,7 @@ const HistoricoChats = ({ chats }) => {
       ) : (
         <ChatList
           chats={filteredChats}
+          onDeleteChat={onDeleteChat}
           emptyState={
             <EmptyState
               searchTerm={searchTerm}

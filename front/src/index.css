@@ -91,3 +91,41 @@ a {
 .message-timestamp {
   font-size: 0.75rem;
 }
+
+/* Markdown formatting for assistant messages */
+.message-assistant {
+  background-color: #e9ecef;
+  color: #212529;
+  max-width: 80%;
+  padding: 0.75rem 1rem !important; /* Substitui o padding grande padrão */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Remove espaço extra do último elemento dentro da mensagem */
+.message-assistant > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Ajuste para parágrafos dentro das mensagens */
+.message-assistant p {
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+/* Ajuste similar para a mensagem do usuário por consistência */
+.message-user {
+  background-color: #212529;
+  color: white;
+  max-width: 80%;
+  padding: 0.75rem 1rem !important;
+  display: flex; /* Adicionar esta linha para habilitar flexbox */
+  flex-direction: column;
+  justify-content: center;
+}
+
+.message-user p {
+  margin-bottom: 0.0rem;
+  margin-top: 0;
+}

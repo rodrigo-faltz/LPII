@@ -1,5 +1,6 @@
 import React from "react";
 import ChatMain from "../components/ChatMain";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -7,10 +8,21 @@ import Sidebar from "../components/Sidebar";
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
+
+    const extractChatIdFromUrl = () => {
+      const urlPath = window.location.pathname;
+      const match = urlPath.match(/\/chat\/(\d+)/);
+      return match ? parseInt(match[1]) : null;
+    };
+
+    console.log("URL atual:", window.location.pathname);
+
     this.state = {
       messages: [],
       inputMessage: "",
       activeNav: "chat",
+      chatId: extractChatIdFromUrl(),
+      userId: parseInt(localStorage.getItem("userId"))
     };
   }
 
@@ -25,6 +37,28 @@ export default class Home extends React.Component {
       this.setState({ messages: [initialMessage] });
     }
   }
+
+  componentDidUpdate(prevProps) {
+   
+
+    const oldChatId = prevProps.match?.params?.id;
+    const newChatId = this.props.match?.params?.id;
+
+   
+
+    if (oldChatId !== newChatId) {
+      const parsedNewChatId = parseInt(newChatId) || null;
+
+
+      this.setState({ 
+        messages: [],
+        chatId: parsedNewChatId
+      }, () => {
+        console.log(`State atualizado - chatId no state: ${this.state.chatId}`);
+      });
+    }
+  }
+
 
   setMessages = (newMessages) => {
     this.setState({
@@ -83,8 +117,8 @@ export default class Home extends React.Component {
                     this.setState({ inputMessage: value })
                   }
                   handleSendMessage={this.handleSendMessage}
-                  chatId={this.props.match?.params?.id || 1}
-                  userId={this.props.match?.params?.userId || 1} 
+                  chatId={this.state.chatId}
+                  userId={this.state.userId} 
                 />
               </div>
             </div>

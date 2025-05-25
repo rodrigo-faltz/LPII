@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
+//import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import History from "./pages/History";
 import Chat from "./pages/Chat";
