@@ -11,19 +11,27 @@ export default class MessageService {
     private messageRepo = new MessageRepository();
 
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
+    const messagecreated = await this.messageRepo.createMessage(messageData);
 
-        const messagecreated = await this.messageRepo.createMessage(messageData);
-        const message = {
-            chatId: messageData.chat_id,
-            userId: messageData.author_id,
-            message: messageData.content
-        };
+    const message = {
+        chatId: messageData.chat_id,
+        userId: messageData.author_id,
+        message: messageData.content
+    };
 
-        await BARRAMENTO.publish('message.exchange', 'message.created', message);
-        console.log('Message published to RabbitMQ:', message);
+    // Certifique-se de usar o mesmo nome do exchange e routing key configurado no consumidor
+    await BARRAMENTO.channel?.publish(
+        'message_exchange',      // nome correto do exchange
+        'message.created',       // routing key
+        Buffer.from(JSON.stringify(message)), // conversão para buffer
+        { persistent: true }     // opcional, garante que a mensagem persista mesmo após restart do broker
+    );
 
-        return messagecreated;
-    }
+    console.log('Message published to RabbitMQ:', message);
+
+    return messagecreated;
+}
+
 
     async updateMessage(messageId: number, messageData: MessageUpdateDTO): Promise<Message> {
         const updatedMessage = await this.messageRepo.getMessageById(messageId);
