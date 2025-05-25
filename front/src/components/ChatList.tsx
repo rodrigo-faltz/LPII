@@ -32,7 +32,7 @@ const ChatListItem = ({ chat }: ChatListItemProps) => (
   >
     <div className="d-flex w-100 justify-content-between align-items-center">
       <h5 className="mb-1">{chat.titulo}</h5>
-      <small className="text-muted">{formatDateTime(chat.dataHora)}</small>
+      
     </div>
     <div className="d-flex w-100 justify-content-between align-items-center">
       <p className="mb-1 text-truncate chat-message-truncate">

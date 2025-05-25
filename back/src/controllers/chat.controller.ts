@@ -89,7 +89,7 @@ export default class ChatController {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(500).json({ message: 'Erro interno do servidor: getChatsByUserId' });
+                res.status(200).json({ message: 'Não há chats disponíveis para este usuário.' });
             }
         }
     }
