@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function ChatMain({
   messages,
+  setMessages,
   inputMessage,
   setInputMessage,
   handleSendMessage: parentHandleSendMessage,
@@ -83,6 +84,8 @@ export default function ChatMain({
     }
   };
 
+  
+
   const testConnection = async () => {
     try {
       console.log("Testing API connection...");
@@ -95,10 +98,38 @@ export default function ChatMain({
     }
   };
 
-  
+  const loadChatHistory = async () => {
+    try {
+      const effectiveChatId = chatId || 1
+      console.log(`ChatMain: Carregando histórico para o chat ${effectiveChatId}...`);
+      const response = await axios.get(`http://localhost:3000/api/message/chat/${effectiveChatId}`);
+
+      if (response.data && Array.isArray(response.data)) {
+        console.log(`ChatMain: ${response.data.length} mensagens carregadas`);
+
+        const formattedMessages = response.data.map(msg => ({
+          id: msg.id,
+          content: msg.content,
+          sender: msg.author_id === 0 ? 'assistant' : 'user', // Depois fazer com que o componente use os mesmo formato que o do DB
+          timestamp: new Date(msg.created_at).toLocaleString("pt-BR")
+        }));
+
+        if (typeof setMessages === 'function') {
+          setMessages(formattedMessages);
+        } else {
+          console.warn("ChatMain: setMessages não é uma função, não é possível atualizar o estado");
+        }
+      } else {
+        console.log("ChatMain: Nenhuma mensagem encontrada para este chat");
+      }
+    } catch (error) {
+      console.error("ChatMain: Erro ao carregar histórico de mensagens:", error);
+    }
+  };
 
   useEffect(() => {
     testConnection();
+    loadChatHistory();
   }, []);
 
   useEffect(() => {

@@ -26,6 +26,12 @@ export default class Home extends React.Component {
     }
   }
 
+  setMessages = (newMessages) => {
+    this.setState({
+      messages: newMessages
+    });
+  }
+
   handleSendMessage = (e, sender = "user") => {
     e.preventDefault();
     console.log("Parent handleSendMessage called", { sender });
@@ -71,11 +77,14 @@ export default class Home extends React.Component {
               >
                 <ChatMain
                   messages={this.state.messages}
+                  setMessages={this.setMessages}
                   inputMessage={this.state.inputMessage}
                   setInputMessage={(value) =>
                     this.setState({ inputMessage: value })
                   }
                   handleSendMessage={this.handleSendMessage}
+                  chatId={this.props.match?.params?.id || 1}
+                  userId={this.props.match?.params?.userId || 1} 
                 />
               </div>
             </div>
