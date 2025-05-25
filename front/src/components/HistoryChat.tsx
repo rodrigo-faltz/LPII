@@ -5,7 +5,7 @@ import { LoadingIndicator } from "./LoadingIndicator";
 import { EmptyState } from "./EmptyState";
 import { useChatFilters } from "./../hooks/useChatFilters";
 
-const HistoricoChats = ({ chats, initialFilter = "todas" }) => {
+const HistoricoChats = ({ chats, initialFilter = "todas", onDeleteChat }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const {
@@ -76,6 +76,7 @@ const HistoricoChats = ({ chats, initialFilter = "todas" }) => {
       ) : (
         <ChatList
           chats={filteredChats}
+          onDeleteChat={onDeleteChat}
           emptyState={
             <EmptyState
               searchTerm={searchTerm}

@@ -197,7 +197,7 @@ export default function ChatMain({
           <input
             type="text"
             className="form-control me-2"
-            placeholder="Enter your message"
+            placeholder="Escreva sua mensagem..."
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />

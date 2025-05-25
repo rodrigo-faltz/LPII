@@ -83,6 +83,36 @@ class History extends React.Component {
     }
   };
 
+  handleDeleteChat = async (chatId) => {
+    if (!chatId) return;
+    
+    try {
+      this.setState({ loading: true });
+      
+      // Primeiro, excluir todas as mensagens associadas ao chat
+      const messagesRes = await axios.get(`/message/chat/${chatId}`);
+      if (messagesRes.data && messagesRes.data.length > 0) {
+        console.log(`Excluindo ${messagesRes.data.length} mensagens do chat ${chatId}`);
+        await Promise.all(
+          messagesRes.data.map(message => 
+            axios.delete(`/message/${message.id}`)
+          )
+        );
+      }
+      
+      // Em seguida, excluir o chat
+      await axios.delete(`/chat/${chatId}`);
+      console.log(`Chat ${chatId} excluído com sucesso`);
+      
+      // Atualizar a lista de chats
+      this.handleChats();
+    } catch (error) {
+      console.error("Erro ao excluir chat:", error);
+      alert("Não foi possível excluir o chat. Por favor, tente novamente.");
+      this.setState({ loading: false });
+    }
+  }
+
   componentDidMount() {
     this.handleChats();
   }
@@ -102,7 +132,6 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
-              {/* Mostrar qual filtro está aplicado (opcional) */}
               {materiaFilter && (
                 <div className="alert alert-info mb-3">
                   <div className="d-flex justify-content-between align-items-center">
@@ -119,13 +148,11 @@ class History extends React.Component {
                   </div>
                 </div>
               )}
-              
-              {/* Código de loading e error existente... */}
-
               {!loading && !error && (
                 <HistoryChat 
                   chats={chats} 
                   initialFilter={materiaFilter || "todas"} 
+                  onDeleteChat={this.handleDeleteChat}
                 />
               )}
             </div>
