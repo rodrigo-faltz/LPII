@@ -21,21 +21,25 @@ export const useChatFilters = ({
   useEffect(() => {
     let result = [...chats];
 
-    // Filtragem
-    if (filterValue !== defaultFilter) {
-      result = result.filter((chat) => chat.materia === filterValue);
+    // Aplicar filtro por matéria
+    if (filterValue !== "todas") {
+      console.log("Aplicando filtro:", filterValue);
+      result = result.filter(chat => 
+        chat.materia && chat.materia.toLowerCase() === filterValue.toLowerCase()
+      );
     }
 
+    // Aplicar pesquisa por termo
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(
         (chat) =>
-          chat.titulo?.toLowerCase().includes(term) ||
-          chat.ultimaMensagem.toLowerCase().includes(term)
+          (chat.materia && chat.materia.toLowerCase().includes(term)) ||
+          (chat.ultimaMensagem && chat.ultimaMensagem.toLowerCase().includes(term))
       );
     }
 
-    // Ordenação
+    // Aplicar ordenação
     result.sort((a, b) => {
       const dateA = new Date(a.dataHora).getTime();
       const dateB = new Date(b.dataHora).getTime();
@@ -43,7 +47,7 @@ export const useChatFilters = ({
     });
 
     setFilteredChats(result);
-  }, [chats, searchTerm, filterValue, sortValue, defaultFilter]);
+  }, [chats, searchTerm, filterValue, sortValue]);
 
   return {
     filteredChats,

@@ -7,11 +7,16 @@ import axios from "axios";
 class History extends React.Component {
   constructor(props) {
     super(props);
+
+    const params = new URLSearchParams(window.location.search);
+    const materiaFilter = params.get('materia');
+
     this.state = {
       activeNav: "historico",
       loading: false,
       chats: [],
       error: null,
+      materiaFilter: materiaFilter
     };
 
     axios.defaults.baseURL = "http://localhost:3000/api";
@@ -83,7 +88,7 @@ class History extends React.Component {
   }
 
   render() {
-    const { chats, loading, error } = this.state;
+    const { chats, loading, error, materiaFilter } = this.state;
 
     return (
       <div className="container-fluid p-0 vh-100">
@@ -97,24 +102,32 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
-              {loading && (
-                <div className="text-center py-5">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Carregando...</span>
+              {/* Mostrar qual filtro está aplicado (opcional) */}
+              {materiaFilter && (
+                <div className="alert alert-info mb-3">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span>Filtrando por: <strong>{materiaFilter}</strong></span>
+                    <button 
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => {
+                        window.history.pushState({}, '', '/home/historico');
+                        this.setState({ materiaFilter: null });
+                      }}
+                    >
+                      Limpar filtro
+                    </button>
                   </div>
                 </div>
               )}
+              
+              {/* Código de loading e error existente... */}
 
-              {error && (
-                <div className="alert alert-danger">
-                  {error} -{" "}
-                  <button onClick={this.handleChats} className="btn btn-link">
-                    Tentar novamente
-                  </button>
-                </div>
+              {!loading && !error && (
+                <HistoryChat 
+                  chats={chats} 
+                  initialFilter={materiaFilter || "todas"} 
+                />
               )}
-
-              {!loading && !error && <HistoryChat chats={chats} />}
             </div>
           </div>
         </div>
