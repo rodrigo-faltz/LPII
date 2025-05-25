@@ -1,9 +1,10 @@
 import Router from 'express';
 import MessageController from '../controllers/message.controller';
 import { authenticate } from '../middleware/auth.middleware';
+import { messageService } from '@/app';
 
 const router = Router();
-const messageController = new MessageController();
+const messageController = new MessageController(messageService);
 
 // Create message
 router.post('/', authenticate, messageController.createMessage.bind(messageController));

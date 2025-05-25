@@ -4,7 +4,7 @@ import MessageService from '../services/message.service';
 
 
 export default class MessageController {
-    constructor(private messageService: MessageService = new MessageService()) {}
+    constructor(private messageService: MessageService ) {}
     
 async createMessage(req: Request, res: Response): Promise<Response> {
     try {

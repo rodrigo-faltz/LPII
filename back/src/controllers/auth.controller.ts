@@ -7,7 +7,7 @@ import { UserCreateDTO } from '../models/user.model';
 import { UserLoginDTO } from '../models/user.model';
 
 export default class AuthController {
-  private authService = new AuthService();
+  constructor(private authService: AuthService) {}
 
   async getProfile(req: CustomRequest, res: Response) {
     try {

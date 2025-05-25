@@ -3,9 +3,10 @@ import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
 import { validateRegister, validateLogin } from '../validation/auth.validator';
 import { authenticate } from '../middleware/auth.middleware';
+import { authService } from '@/app';
 
 const router = Router();
-const authController = new AuthController();
+const authController = new AuthController(authService);
 
 // Public routes
 router.post('/register', validateRegister, authController.register.bind(authController));

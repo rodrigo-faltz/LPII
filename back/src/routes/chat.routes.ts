@@ -1,10 +1,11 @@
 import { Router } from "express";
 import ChatController from "../controllers/chat.controller";
 import { authenticate } from "../middleware/auth.middleware";
+import { chatService } from "@/app";
 
 
 const router = Router();
-const chatController = new ChatController();
+const chatController = new ChatController(chatService);
 
 //Create chat
 

@@ -1,11 +1,12 @@
 import Router from "express";
 import SubjectController from "../controllers/subject.controller";
 import { authenticate } from "../middleware/auth.middleware";
+import SubjectService from "@/services/subject.service";
+import { authService, subjectService } from "@/app";
 // import { authorize } from "../middleware/authorization.middleware";
 
 const router = Router();
-const subjectController = new SubjectController();
-
+const subjectController = new SubjectController(subjectService);
 // Create subject
 router.post("/", authenticate, subjectController.createSubject.bind(subjectController));
 

@@ -47,12 +47,13 @@ const messageBus = new MessageBus({
 // Initialize services with the message bus
 // You can also pass the message bus to the services if needed
 
-const authService = new AuthService(messageBus);
-const chatService = new ChatService(new ChatRepository(), messageBus);
-const subjectService = new SubjectService(new SubjectRepository(), messageBus);
-const messageService = new MessageService(new MessageRepository(), messageBus);
+export const authService = new AuthService(messageBus);
+export const chatService = new ChatService(new ChatRepository(), messageBus);
+export const subjectService = new SubjectService(new SubjectRepository(), messageBus);
+export const messageService = new MessageService(new MessageRepository(), messageBus);
 
 const app = express();
+
 
 
 // 1. Database Connection

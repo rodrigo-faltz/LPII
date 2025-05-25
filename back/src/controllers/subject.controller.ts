@@ -6,7 +6,7 @@ import SubjectService from '../services/subject.service';
 
 
 export default class SubjectController {
-    private subjectService = new SubjectService();
+    constructor(private subjectService: SubjectService) {}
 
     async createSubject(req: CustomRequest, res: Response) {
         try {

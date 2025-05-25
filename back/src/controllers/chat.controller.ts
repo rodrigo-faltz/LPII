@@ -7,7 +7,7 @@ import { ChatResponseDTO } from '../models/chat.model';
 
 
 export default class ChatController {
-    private chatService = new ChatService();
+    constructor(private chatService: ChatService) {}
 
     async createChat(req: Request, res: Response) {
         try {
