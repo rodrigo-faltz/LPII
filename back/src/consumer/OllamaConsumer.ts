@@ -3,42 +3,46 @@ import { MessageCreateDTO } from '../models/message.model';
 import MessageRepository from '../repositories/message.repository';
 import { BARRAMENTO } from '../app';
 
-
-// Importando o repositório de mensagens
 const messageRepository = new MessageRepository();
 
-const MESSAGE_QUEUE = 'message.queue';
-const BOT_AUTHOR_ID = 0; // ID fixo para o bot, ajuste conforme seu sistema
+const EXCHANGE_NAME = 'message_exchange';
+const ROUTING_KEY = 'message.created';
+const QUEUE_NAME = 'message_created_queue'; // pode ser exclusivo ou durável, dependendo do caso
+const BOT_AUTHOR_ID = 0;
 
 async function consumeMessageQueue() {
+  if (!BARRAMENTO.channel) {
+    throw new Error('BARRAMENTO não inicializado. Certifique-se de chamar BARRAMENTO.connect() antes.');
+  }
 
-if (!BARRAMENTO.channel) {
-  throw new Error('BARRAMENTO não inicializado. Certifique-se de chamar BARRAMENTO.connect() antes.');
-}
+  const channel = BARRAMENTO.channel;
 
+  // 1. Declara o exchange (tipo direct)
+  await channel.assertExchange(EXCHANGE_NAME, 'direct', { durable: true });
 
-  await BARRAMENTO.channel.assertQueue(MESSAGE_QUEUE, { durable: true });
+  // 2. Declara a fila que vai escutar apenas 'message.created'
+  await channel.assertQueue(QUEUE_NAME, { durable: true });
 
-  console.log(`[*] Aguardando mensagens na fila ${MESSAGE_QUEUE}...`);
+  // 3. Faz o binding da fila com a routing key específica
+  await channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
 
-  BARRAMENTO.channel.consume(MESSAGE_QUEUE, async (msg) => {
+  console.log(`[*] Aguardando mensagens com routing key "${ROUTING_KEY}" na fila "${QUEUE_NAME}"...`);
+
+  // 4. Começa a consumir
+  channel.consume(QUEUE_NAME, async (msg) => {
     if (msg === null) return;
 
     try {
       const content = JSON.parse(msg.content.toString());
       console.log('[x] Mensagem recebida da fila:', content);
 
-      // Exemplo da estrutura esperada da mensagem (do publish):
-      // { chatId, userId, subjectId, message }
       const userQuestion = content.message;
       const chatId = content.chatId;
 
-      // Chama Ollama para gerar resposta
       const botAnswer = await ollamaService.generateResponse(userQuestion);
 
       console.log('[*] Resposta do Ollama gerada:', botAnswer);
 
-      // Salva a resposta no banco como nova mensagem no chat
       const newMessageData: MessageCreateDTO = {
         content: botAnswer,
         chat_id: chatId,
@@ -49,17 +53,12 @@ if (!BARRAMENTO.channel) {
 
       console.log('[*] Mensagem do bot salva no banco:', createdMessage);
 
-      // Confirma que a mensagem foi processada
-      BARRAMENTO.channel.ack(msg);
-
+      channel.ack(msg);
     } catch (err) {
       console.error('[!] Erro ao processar mensagem da fila:', err);
-      // Dependendo do seu caso, pode fazer channel.nack(msg) para reprocessar depois
-      BARRAMENTO.channel.nack(msg, false, false); // descarta a mensagem para não travar a fila
+      channel.nack(msg, false, false); // descarta a mensagem
     }
   });
 }
-
-consumeMessageQueue().catch(console.error);
 
 export default consumeMessageQueue;
