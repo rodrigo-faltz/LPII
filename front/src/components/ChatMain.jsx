@@ -35,13 +35,8 @@ export default function ChatMain({
         "http://localhost:3000/api/message", 
         {
           content: inputMessage,
-<<<<<<< HEAD
-          chat_id: chatId || 1,
-          author_id: userId || 1,
-=======
           chat_id: Number(chatId), // Mudar para chatId quando implementado
           author_id: Number(userId), // Mudar para userId quando implementado
->>>>>>> Conectando-Front
         }
       );
       
@@ -78,30 +73,7 @@ export default function ChatMain({
           setIsGenerating(false);
           console.log("Stopped polling after maximum attempts");
         }
-<<<<<<< HEAD
       }, 1000); // Check every second
-=======
-      );
-
-      console.log("ChatMain: AI Response received:", response.data);
-      const aiResponseDb = await axios.post("http://localhost:3000/api/message",
-        {
-          content: response.data.response,
-          chat_id: Number(chatId), //Mudar para chatId quando implementado
-          author_id: 0 
-        }
-      );
-      console.log("ChatMain: AI message saved to database", aiResponseDb.data);
-
-
-      const aiMessageEvent = {
-        preventDefault: () => {},
-        aiResponse: response.data.response, 
-      };
-
-      parentHandleSendMessage(aiMessageEvent, "assistant");
-      setIsGenerating(false);
->>>>>>> Conectando-Front
     } catch (error) {
       console.error("ChatMain: Error getting AI response:", error);
       setIsGenerating(false);
@@ -128,11 +100,7 @@ export default function ChatMain({
 
   const loadChatHistory = async () => {
     try {
-<<<<<<< HEAD
-      const effectiveChatId = chatId || 1;
-=======
       const effectiveChatId = chatId
->>>>>>> Conectando-Front
       console.log(`ChatMain: Carregando histórico para o chat ${effectiveChatId}...`);
       const response = await axios.get(`http://localhost:3000/api/message/chat/${effectiveChatId}`);
 
@@ -159,7 +127,6 @@ export default function ChatMain({
     }
   };
 
-<<<<<<< HEAD
   // Effect to check if a new message from the assistant has arrived
   useEffect(() => {
     // If we're expecting a response and messages have increased
@@ -194,16 +161,6 @@ export default function ChatMain({
       }
     };
   }, []);
-=======
-  useEffect(() => { // DELETAR DEPOIS APENAS PARA TESTE
-    console.log("ChatMain recebeu props:", {
-      chatId,
-      userId,
-      chatIdType: typeof chatId,
-      userIdType: typeof userId
-    });
-  }, [chatId, userId]);
->>>>>>> Conectando-Front
 
   useEffect(() => {
     const container = messagesContainerRef.current;
