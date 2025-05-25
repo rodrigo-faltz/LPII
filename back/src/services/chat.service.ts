@@ -1,9 +1,10 @@
 import ChatRepository from '../repositories/chat.repository';
 import { ChatCreateDTO, ChatResponseDTO } from '../models/chat.model';
+import {BARRAMENTO} from '../app';
 import { MessageBus } from '../core/MessageBus';
 
 export default class ChatService {
-  constructor(private messageBus: MessageBus) {}
+  private chatRepo = new ChatRepository();
 
   async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
 
@@ -16,7 +17,7 @@ export default class ChatService {
       message: chat.message
     };
 
-    await this.messageBus.publish('chat.exchange', 'chat.created', message);
+    await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
     console.log('Message published to RabbitMQ:', message);
 
     return chat;
@@ -37,7 +38,7 @@ export default class ChatService {
 
 
 
-      await this.messageBus.publish('chat.exchange', 'chat.created', message);
+      await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
       console.log('Message published to RabbitMQ:', message);
 
     }
@@ -63,7 +64,7 @@ export default class ChatService {
             subjectId: chat.subject_id,
             message: chat.message
         };
-        await this.messageBus.publish('chat.exchange', 'chat.deleted', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.deleted', message);
         console.log('Message published to RabbitMQ:', message);
         return this.chatRepo.deleteChat(chatId);
     }
@@ -80,7 +81,7 @@ export default class ChatService {
             message: chats[0].message
         };
 
-        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
       }
@@ -98,7 +99,7 @@ export default class ChatService {
             message: chats[0].message
         };
 
-        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
     }
@@ -114,7 +115,7 @@ export default class ChatService {
             subjectId: chats[0].subject_id,
             message: chats[0].message
         };
-        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
     }

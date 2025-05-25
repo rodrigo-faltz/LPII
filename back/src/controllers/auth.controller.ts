@@ -8,8 +8,9 @@ import { UserLoginDTO } from '../models/user.model';
 import { BARRAMENTO } from '../app';
 
 
+
 export default class AuthController {
-  private authService = new AuthService(BARRAMENTO);
+  private authService = new AuthService();
 
   async getProfile(req: CustomRequest, res: Response) {
     try {

@@ -5,9 +5,10 @@ import { MessageDeleteDTO } from "../models/message.model";
 import { MesssageGetByChatIdDTO } from "../models/message.model";
 import { Message } from "../models/message.model";
 import { MessageBus } from "../core/MessageBus";
+import { BARRAMENTO } from "../app";
 
 export default class MessageService {
-    constructor(private messageRepo: MessageRepository = new MessageRepository(), private messageBus: MessageBus) {}
+    private messageRepo = new MessageRepository();
 
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
         if (messageData.content && messageData.content.length > 500) {
@@ -52,7 +53,7 @@ export default class MessageService {
             message: messageData.content
         };
 
-        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
         console.log('Message published to RabbitMQ:', message);
 
         return messagecreated;
@@ -70,7 +71,7 @@ export default class MessageService {
             userId: updatedMessage.author_id,
             message: messageData.content
         };
-        await this.messageBus.publish('chat.exchange', 'chat.updated', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.updated', message);
         console.log('Message published to RabbitMQ:', message);
         return updatedMessage;
     }
@@ -83,7 +84,7 @@ export default class MessageService {
 
         };
 
-        await this.messageBus.publish('chat.exchange', 'chat.deleted', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.deleted', message);
         console.log('Message published to RabbitMQ:', message);
         
     }
@@ -98,7 +99,7 @@ export default class MessageService {
         const message = {
             chatId: chatId
         };
-        await this.messageBus.publish('chat.exchange', 'chat.retrieved', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return messages;
     }
@@ -112,7 +113,7 @@ export default class MessageService {
         const messageData = {
             messageId: messageId
         };
-        await this.messageBus.publish('chat.exchange', 'chat.retrieved', messageData);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', messageData);
         console.log('Message published to RabbitMQ:', messageData);
 
 
@@ -130,7 +131,7 @@ export default class MessageService {
             allMessages: true
         };
 
-        await this.messageBus.publish('chat.exchange', 'chat.retrieved', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return messages;
     }

@@ -7,7 +7,7 @@ import MessageService from '../services/message.service';
 
 export default class MessageController {
     
-    private messageService = new MessageService(new MessageRepository(), BARRAMENTO);
+    private messageService = new MessageService();
 
     async createMessage(req: Request, res: Response): Promise<Response> {
         try {

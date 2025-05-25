@@ -3,11 +3,11 @@ import { comparePasswords, hashPassword } from '../utils/bcrypt';
 import { generateToken } from '../utils/jwt';
 import { UserCreateDTO, UserLoginDTO } from '../models/user.model';
 import{ MessageBus } from '../core/MessageBus';
+import  {BARRAMENTO}  from '../app';
 
 export default class AuthService {
 
-  constructor(private messageBus: MessageBus) { 
-  }
+  
   private userRepo = new UserRepository();
 
   async register(userData: UserCreateDTO) {
@@ -17,7 +17,7 @@ export default class AuthService {
       email: userData.email,
       password: userData.password
     };
-    await this.messageBus.publish('user.exchange', 'user.created', user);
+    await BARRAMENTO.publish('user.exchange', 'user.created', user);
     console.log('User published to RabbitMQ:', user);
 
     const hashedPassword = await hashPassword(userData.password);
@@ -34,7 +34,7 @@ export default class AuthService {
       password: credentials.password
     };
 
-    await this.messageBus.publish('user.exchange', 'user.login', userlogin);
+    await BARRAMENTO.publish('user.exchange', 'user.login', userlogin);
     console.log('User login published to RabbitMQ:', userlogin);
 
     const user = await this.userRepo.findByEmail(credentials.email);
@@ -51,7 +51,7 @@ export default class AuthService {
       userId: userId
     };
 
-    await this.messageBus.publish('user.exchange', 'user.profile', userProfile);
+    await BARRAMENTO.publish('user.exchange', 'user.profile', userProfile);
     console.log('User profile published to RabbitMQ:', userProfile);
     const user = await this.userRepo.findById(userId);
     if (!user) {
