@@ -5,9 +5,11 @@ import {AppError} from '../types/custom-error';
 import { CustomRequest } from '../types/types';
 import { UserCreateDTO } from '../models/user.model';
 import { UserLoginDTO } from '../models/user.model';
+import { BARRAMENTO } from '../app';
+
 
 export default class AuthController {
-  private authService = new AuthService();
+  private authService = new AuthService(BARRAMENTO);
 
   async getProfile(req: CustomRequest, res: Response) {
     try {

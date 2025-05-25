@@ -22,18 +22,17 @@ import UserRepository from './repositories/user.repository';
 
 
 // 1. Initialize MessageBus
-const messageBus = new MessageBus({
+const BARRAMENTO = new MessageBus({
   hostname: 'localhost',
   port: 5672,
   username: 'guest',
   password: 'guest'
 });
 
-// 2. Connect to RabbitMQ
 // top‐level async IIFE
 (async () => {
   try {
-    await messageBus.connect();
+    await BARRAMENTO.connect();
     console.log('Connected to RabbitMQ');
   } catch (err) {
     console.error('Error connecting to RabbitMQ:', err);
@@ -42,15 +41,15 @@ const messageBus = new MessageBus({
   // …then start your server…
 })();
 
+// Export the message bus for use in other modules
+export { BARRAMENTO };
+
+
 
 // 3. Initialize Services
 // Initialize services with the message bus
 // You can also pass the message bus to the services if needed
 
-const authService = new AuthService(messageBus);
-const chatService = new ChatService(new ChatRepository(), messageBus);
-const subjectService = new SubjectService(new SubjectRepository(), messageBus);
-const messageService = new MessageService(new MessageRepository(), messageBus);
 
 const app = express();
 

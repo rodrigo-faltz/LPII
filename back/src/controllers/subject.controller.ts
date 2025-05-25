@@ -3,10 +3,12 @@ import {AppError} from '../types/custom-error';
 import {CustomRequest} from '../types/types';
 import {SubjectCreateDTO, SubjectUpdateDTO} from '../models/subject.model';
 import SubjectService from '../services/subject.service';
+import SubjectRepository from '@/repositories/subject.repository';
+import {BARRAMENTO} from '../app';
 
 
 export default class SubjectController {
-    private subjectService = new SubjectService();
+    private subjectService = new SubjectService(new SubjectRepository(), BARRAMENTO);
 
     async createSubject(req: CustomRequest, res: Response) {
         try {

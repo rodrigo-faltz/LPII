@@ -3,7 +3,7 @@ import { ChatCreateDTO, ChatResponseDTO } from '../models/chat.model';
 import { MessageBus } from '../core/MessageBus';
 
 export default class ChatService {
-  constructor(private chatRepo: ChatRepository = new ChatRepository(), private messageBus: MessageBus = new MessageBus()) {}
+  constructor(private messageBus: MessageBus) {}
 
   async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
 

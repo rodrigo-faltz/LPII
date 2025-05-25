@@ -4,10 +4,11 @@ import { CustomRequest } from '../types/types';
 import { ChatCreateDTO, ChatUpdateDTO } from '../models/chat.model';
 import { AppError } from '../types/custom-error';
 import { ChatResponseDTO } from '../models/chat.model';
-
+import { BARRAMENTO } from '../app';
+import ChatRepository from '@/repositories/chat.repository';
 
 export default class ChatController {
-    private chatService = new ChatService();
+    private chatService = new ChatService(new ChatRepository(), BARRAMENTO);
 
     async createChat(req: Request, res: Response) {
         try {
