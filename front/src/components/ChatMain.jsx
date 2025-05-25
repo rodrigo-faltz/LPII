@@ -37,8 +37,8 @@ export default function ChatMain({
         "http://localhost:3000/api/message", 
         {
           content: inputMessage,
-          chat_id: 1, // Mudar para chatId quando implementado
-          author_id: 1, // Mudar para userId quando implementado
+          chat_id: Number(chatId), // Mudar para chatId quando implementado
+          author_id: Number(userId), // Mudar para userId quando implementado
         }
       );
       console.log("ChatMain: User message saved to database:", responseDb.data);
@@ -57,7 +57,7 @@ export default function ChatMain({
       const aiResponseDb = await axios.post("http://localhost:3000/api/message",
         {
           content: response.data.response,
-          chat_id: 1, //Mudar para chatId quando implementado
+          chat_id: Number(chatId), //Mudar para chatId quando implementado
           author_id: 0 
         }
       );
@@ -100,7 +100,7 @@ export default function ChatMain({
 
   const loadChatHistory = async () => {
     try {
-      const effectiveChatId = chatId || 1
+      const effectiveChatId = chatId
       console.log(`ChatMain: Carregando histórico para o chat ${effectiveChatId}...`);
       const response = await axios.get(`http://localhost:3000/api/message/chat/${effectiveChatId}`);
 
@@ -127,10 +127,14 @@ export default function ChatMain({
     }
   };
 
-  useEffect(() => {
-    testConnection();
-    loadChatHistory();
-  }, []);
+  useEffect(() => { // DELETAR DEPOIS APENAS PARA TESTE
+    console.log("ChatMain recebeu props:", {
+      chatId,
+      userId,
+      chatIdType: typeof chatId,
+      userIdType: typeof userId
+    });
+  }, [chatId, userId]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -138,6 +142,15 @@ export default function ChatMain({
       container.scrollTop = container.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+  console.log("ChatMain: useEffect para carregar histórico executado");
+  console.log("ChatId:", chatId, "UserId:", userId);
+  
+  if (chatId) {
+    loadChatHistory();
+  }
+  }, [chatId]); // Carrega o histórico quando o chatId muda
 
   return (
     <div className="d-flex flex-column h-100 overflow-hidden">

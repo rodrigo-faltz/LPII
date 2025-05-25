@@ -27,17 +27,24 @@ class History extends React.Component {
         axios.get(`/message/chat/${chat.id}`),
       ]);
 
+      const truncateMessage = (message, maxLength = 80) => {
+      if (!message) return "";
+      return message.length > maxLength 
+        ? message.substring(0, maxLength) + "..." 
+        : message;
+      };
+
       const messages = messagesRes.data;
       const lastMessage =
-        messages.length > 0 ? messages[messages.length - 1] : null;
+        messages.length > 0 ? messages[0] : null;
 
       return {
         id: chat.id,
         materia: subjectRes.data.name,
         dataHora: lastMessage ? lastMessage.created_at : chat.created_at,
-        ultimaMensagem: lastMessage
-          ? lastMessage.content
-          : "Nenhuma mensagem ainda",
+        ultimaMensagem: lastMessage 
+        ? truncateMessage(lastMessage.content) 
+        : "Nenhuma mensagem ainda",
       };
     } catch (error) {
       console.error(`Erro ao carregar chat ${chat.id}:`, error);

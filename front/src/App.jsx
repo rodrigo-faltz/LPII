@@ -57,6 +57,7 @@ function App() {
           />
           <Route
             path="/home/chat/:id"
+            component ={Home}
             element={
               <PrivateRoute>
                 <Chat />
