@@ -6,15 +6,39 @@ import MessageService from '../services/message.service';
 export default class MessageController {
     constructor(private messageService: MessageService = new MessageService()) {}
     
-    async createMessage(req: Request, res: Response): Promise<Response> {
-        try {
-            const messageData: MessageCreateDTO = req.body;
-            const createdMessage = await this.messageService.createMessage(messageData);
-            return res.status(201).json(createdMessage);
-        } catch (error) {
-            return res.status(500).json({ error: 'Internal server error' });
+async createMessage(req: Request, res: Response): Promise<Response> {
+    try {
+        console.log('Recebendo requisição para criar mensagem:', req.body);
+        const messageData: MessageCreateDTO = req.body;
+        
+        // Validação dos dados
+        if (!messageData.content) {
+            console.error('Erro: content obrigatório');
+            return res.status(400).json({ error: 'O conteúdo da mensagem é obrigatório' });
         }
+        
+        if (typeof messageData.chat_id !== 'number') {
+            console.error('Erro: chat_id deve ser um número');
+            return res.status(400).json({ error: 'chat_id deve ser um número válido' });
+        }
+        
+        if (typeof messageData.author_id !== 'number' && messageData.author_id !== 0) {
+            console.error('Erro: author_id deve ser um número');
+            return res.status(400).json({ error: 'author_id deve ser um número válido' });
+        }
+        
+        console.log('Dados validados, criando mensagem...');
+        const createdMessage = await this.messageService.createMessage(messageData);
+        console.log('Mensagem criada com sucesso:', createdMessage);
+        return res.status(201).json(createdMessage);
+    } catch (error) {
+        console.error('Erro ao criar mensagem:', error);
+        return res.status(500).json({ 
+            error: 'Erro interno do servidor',
+            details: error instanceof Error ? error.message : 'Erro desconhecido'
+        });
     }
+}
 
     async updateMessage(req: Request, res: Response): Promise<Response> {
         try {
