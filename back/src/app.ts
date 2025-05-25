@@ -34,12 +34,18 @@ const BARRAMENTO = new MessageBus({
   try {
     await BARRAMENTO.connect();
     console.log('Connected to RabbitMQ');
+    await BARRAMENTO.initQueues();
+    
+
   } catch (err) {
     console.error('Error connecting to RabbitMQ:', err);
     process.exit(1);
   }
   // …then start your server…
 })();
+
+
+
 
 // Export the message bus for use in other modules
 export { BARRAMENTO };

@@ -28,7 +28,7 @@ export default class ChatService {
     const chat = await this.chatRepo.getChatById(chatId);
     if (!chat) {
       throw new Error(`Chat with ID ${chatId} not found`);
-
+    }
       const message = {
         chatId: chat.id,
         userId: chat.user_id,
@@ -38,10 +38,10 @@ export default class ChatService {
 
 
 
-      await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
+      await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
       console.log('Message published to RabbitMQ:', message);
 
-    }
+    
     return chat;
   }
 
@@ -81,7 +81,7 @@ export default class ChatService {
             message: chats[0].message
         };
 
-        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
       }
@@ -99,7 +99,7 @@ export default class ChatService {
             message: chats[0].message
         };
 
-        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
     }
@@ -115,7 +115,7 @@ export default class ChatService {
             subjectId: chats[0].subject_id,
             message: chats[0].message
         };
-        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return chats;
     }

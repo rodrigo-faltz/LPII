@@ -11,41 +11,6 @@ export default class MessageService {
     private messageRepo = new MessageRepository();
 
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
-        if (messageData.content && messageData.content.length > 500) {
-            throw new Error('Message too long');
-        }
-        if (!messageData.chat_id) {
-            throw new Error('Chat ID is required');
-        }
-        if (!messageData.author_id) {
-            throw new Error('User ID is required');
-        }
-
-        // do not check if the chat exists
-        // const chat = await this.chatRepo.getChatById(messageData.chat_id);
-        // if (!chat) {
-        //     throw new Error(`Chat with ID ${messageData.chat_id} not found`);
-        // }
-
-        // do not check if the user exists
-        // const user = await this.userRepo.getUserById(messageData.author_id);
-        // if (!user) {
-        //     throw new Error(`User with ID ${messageData.author_id} not found`);
-        // }
-
-        // do not check if the subject exists
-        // const subject = await this.subjectRepo.getSubjectById(messageData.subject_id);
-        // if (!subject) {
-        //     throw new Error(`Subject with ID ${messageData.subject_id} not found`);
-        // }
-
-        // do not check if the message exists
-        // const message = await this.messageRepo.getMessageById(messageData.id);
-        // if (message) {
-        //     throw new Error(`Message with ID ${messageData.id} already exists`);
-        // }
-
-        // publish the message to RabbitMQ
         const messagecreated = await this.messageRepo.createMessage(messageData);
         const message = {
             chatId: messageData.chat_id,
@@ -53,7 +18,7 @@ export default class MessageService {
             message: messageData.content
         };
 
-        await BARRAMENTO.publish('chat.exchange', 'chat.created', message);
+        await BARRAMENTO.publish('message.exchange', 'message.created', message);
         console.log('Message published to RabbitMQ:', message);
 
         return messagecreated;
@@ -71,7 +36,7 @@ export default class MessageService {
             userId: updatedMessage.author_id,
             message: messageData.content
         };
-        await BARRAMENTO.publish('chat.exchange', 'chat.updated', message);
+        await BARRAMENTO.publish('message.exchange', 'message.updated', message);
         console.log('Message published to RabbitMQ:', message);
         return updatedMessage;
     }
@@ -84,7 +49,7 @@ export default class MessageService {
 
         };
 
-        await BARRAMENTO.publish('chat.exchange', 'chat.deleted', message);
+        await BARRAMENTO.publish('message.exchange', 'message.deleted', message);
         console.log('Message published to RabbitMQ:', message);
         
     }
@@ -99,7 +64,7 @@ export default class MessageService {
         const message = {
             chatId: chatId
         };
-        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
+        await BARRAMENTO.publish('message.exchange', 'message.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return messages;
     }
@@ -113,7 +78,7 @@ export default class MessageService {
         const messageData = {
             messageId: messageId
         };
-        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', messageData);
+        await BARRAMENTO.publish('message.exchange', 'message.retrieved', messageData);
         console.log('Message published to RabbitMQ:', messageData);
 
 
@@ -131,7 +96,7 @@ export default class MessageService {
             allMessages: true
         };
 
-        await BARRAMENTO.publish('chat.exchange', 'chat.retrieved', message);
+        await BARRAMENTO.publish('message.exchange', 'message.retrieved', message);
         console.log('Message published to RabbitMQ:', message);
         return messages;
     }

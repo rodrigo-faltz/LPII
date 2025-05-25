@@ -31,3 +31,6 @@ export interface MesssageGetByChatIdDTO
     chat_id: number;
 }
 
+export interface MessageGetTopByChatIdDTO{
+    chat_id: number;
+}

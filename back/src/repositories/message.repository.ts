@@ -14,20 +14,8 @@ export default class MessageRepository {
             'INSERT INTO messages (content, chat_id, author_id) VALUES (?, ?, ?)',
             [messageData.content, messageData.chat_id, messageData.author_id]
         );
-        // if(messageData.author_id != 0){
-        //     //Manda pro ollama (MensagemDoOllama)
-        //      salvar a mensagem no content
-        //      zerar o author_id
-        //     const [result2] = await pool.query(
-        //         'INSERT INTO messages (content, chat_id, author_id) VALUES (?, ?, ?)',
-        //         [MensagemDoOllama, messageData.chat_id, 0]
-        //     );
-        //     const createdMessage = await this.getMessageById((result2 as any).insertId);
-        //     if (!createdMessage) {
-        //         throw new Error('Message not found after creation');
-        //     }
-        // }
-
+        
+        
         const createdMessage = await this.getMessageById((result as any).insertId);
         if (!createdMessage) {
             throw new Error('Message not found after creation');
@@ -85,5 +73,12 @@ export default class MessageRepository {
         return rows as Message[];
     }
 
+    async getTopMessagesByChatId(chatId: number): Promise<Message[]> {
+        const [rows] = await pool.query(
+            'SELECT * FROM messages WHERE chat_id = ? ORDER BY created_at DESC LIMIT 1',
+            [chatId]
+        );
+        return rows as Message[];
+    }
 }
 
