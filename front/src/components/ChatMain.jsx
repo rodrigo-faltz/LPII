@@ -9,10 +9,11 @@ export default function ChatMain({
   handleSendMessage: parentHandleSendMessage,
   chatId,
   userId,
-
 }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const messagesContainerRef = useRef(null);
+  const pollingIntervalRef = useRef(null); // Store the interval reference
+  const lastMessageCountRef = useRef(0); // Track number of messages to detect new ones
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -28,53 +29,53 @@ export default function ChatMain({
     parentHandleSendMessage(e);
 
     try {
-      // if (!chatId || !userId) {
-      //   console.error("ChatMain: Missing chatId or userId", { chatId, userId });
-      // }
-
       console.log("ChatMain: Saving user message to database...");
       const responseDb = await axios.post(
         "http://localhost:3000/api/message", 
         {
           content: inputMessage,
-          chat_id: 1, // Mudar para chatId quando implementado
-          author_id: 1, // Mudar para userId quando implementado
+          chat_id: chatId || 1,
+          author_id: userId || 1,
         }
       );
+      
+      // Load chat history immediately after sending
+      await loadChatHistory();
       console.log("ChatMain: User message saved to database:", responseDb.data);
-
-      console.log("ChatMain: Attempting to call AI API...");
+      
+      // Store the current message count for comparison
+      lastMessageCountRef.current = messages.length;
+      
+      // Clear any existing polling interval
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
+      
+      console.log("ChatMain: Starting polling for AI response...");
       setIsGenerating(true);
+      let attempts = 0;
+      const maxAttempts = 30; // Stop after ~30 seconds
 
-      const response = await axios.post(
-        "http://localhost:3000/api/ollama/generate",
-        {
-          prompt: inputMessage,
+      pollingIntervalRef.current = setInterval(async () => {
+        attempts++;
+        console.log(`Polling attempt ${attempts}/${maxAttempts}`);
+        
+        await loadChatHistory();
+        
+        // If we've waited too long, stop polling
+        if (attempts >= maxAttempts) {
+          if (pollingIntervalRef.current) {
+            clearInterval(pollingIntervalRef.current);
+            pollingIntervalRef.current = null;
+          }
+          setIsGenerating(false);
+          console.log("Stopped polling after maximum attempts");
         }
-      );
-
-      console.log("ChatMain: AI Response received:", response.data);
-      const aiResponseDb = await axios.post("http://localhost:3000/api/message",
-        {
-          content: response.data.response,
-          chat_id: 1, //Mudar para chatId quando implementado
-          author_id: 0 
-        }
-      );
-      console.log("ChatMain: AI message saved to database", aiResponseDb.data);
-
-
-      const aiMessageEvent = {
-        preventDefault: () => {},
-        aiResponse: response.data.response, 
-      };
-
-      parentHandleSendMessage(aiMessageEvent, "assistant");
-      setIsGenerating(false);
+      }, 1000); // Check every second
     } catch (error) {
       console.error("ChatMain: Error getting AI response:", error);
       setIsGenerating(false);
-
 
       const errorEvent = { preventDefault: () => {} };
 
@@ -83,8 +84,6 @@ export default function ChatMain({
       setInputMessage("");
     }
   };
-
-  
 
   const testConnection = async () => {
     try {
@@ -100,7 +99,7 @@ export default function ChatMain({
 
   const loadChatHistory = async () => {
     try {
-      const effectiveChatId = chatId || 1
+      const effectiveChatId = chatId || 1;
       console.log(`ChatMain: Carregando histórico para o chat ${effectiveChatId}...`);
       const response = await axios.get(`http://localhost:3000/api/message/chat/${effectiveChatId}`);
 
@@ -110,7 +109,7 @@ export default function ChatMain({
         const formattedMessages = response.data.map(msg => ({
           id: msg.id,
           content: msg.content,
-          sender: msg.author_id === 0 ? 'assistant' : 'user', // Depois fazer com que o componente use os mesmo formato que o do DB
+          sender: msg.author_id === 0 ? 'assistant' : 'user',
           timestamp: new Date(msg.created_at).toLocaleString("pt-BR")
         }));
 
@@ -127,9 +126,39 @@ export default function ChatMain({
     }
   };
 
+  // Effect to check if a new message from the assistant has arrived
+  useEffect(() => {
+    // If we're expecting a response and messages have increased
+    if (isGenerating && messages.length > lastMessageCountRef.current) {
+      // Check if the newest message is from the assistant
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.sender === "assistant") {
+        console.log("AI response received, stopping polling");
+        
+        // Clear the polling interval
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+        
+        setIsGenerating(false);
+      }
+    }
+    
+    // Update our reference to the current message count
+    lastMessageCountRef.current = messages.length;
+  }, [messages, isGenerating]);
+
   useEffect(() => {
     testConnection();
     loadChatHistory();
+    
+    // Clean up polling on component unmount
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
