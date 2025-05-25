@@ -30,14 +30,18 @@ const messageBus = new MessageBus({
 });
 
 // 2. Connect to RabbitMQ
-try {
-  messageBus.connect();
-  console.log('Connected to RabbitMQ');
-}
-catch (error) {
-  console.error('Error connecting to RabbitMQ:', error);
-  process.exit(1);
-}
+// top‐level async IIFE
+(async () => {
+  try {
+    await messageBus.connect();
+    console.log('Connected to RabbitMQ');
+  } catch (err) {
+    console.error('Error connecting to RabbitMQ:', err);
+    process.exit(1);
+  }
+  // …then start your server…
+})();
+
 
 // 3. Initialize Services
 // Initialize services with the message bus
