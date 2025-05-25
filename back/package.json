@@ -18,6 +18,7 @@
         "test:watch": "cross-env NODE_ENV=test jest --watch"
     },
     "dependencies": {
+        "amqplib": "^0.10.8",
         "axios": "^1.9.0",
         "bcrypt": "^5.1.1",
         "cors": "^2.8.5",
@@ -28,6 +29,7 @@
         "mysql2": "^3.14.1"
     },
     "devDependencies": {
+        "@types/amqplib": "^0.10.7",
         "@types/bcrypt": "^5.0.2",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",

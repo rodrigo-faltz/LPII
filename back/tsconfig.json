@@ -3,24 +3,22 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "./dist",
-  "moduleResolution": "node",
-    "rootDir": "",
+    "moduleResolution": "node",
+    "rootDir": "./src",  // Adicione o caminho explícito
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types",
-      "./src/types"  // Fixed path (removed leading slash)
+      "./src/types"
     ],
-    "types": ["express"],
+    "types": ["node","express", "amqplib"],  // Adicione amqplib
     "resolveJsonModule": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/types/*"],
-      "@/*": ["src/*"],
-
+      "@/*": ["src/*"]  // Simplifique os paths
     }
-    
-  }
-  
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

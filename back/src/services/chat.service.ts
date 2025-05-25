@@ -1,13 +1,25 @@
 import ChatRepository from '../repositories/chat.repository';
 import { ChatCreateDTO, ChatResponseDTO } from '../models/chat.model';
+import { MessageBus } from '../core/MessageBus';
 
 export default class ChatService {
-  constructor(private chatRepo: ChatRepository = new ChatRepository()) {}
+  constructor(private chatRepo: ChatRepository = new ChatRepository(), private messageBus: MessageBus = new MessageBus()) {}
 
   async createChat(chatData: ChatCreateDTO): Promise<ChatResponseDTO> {
-    
-    
-    return this.chatRepo.createChat(chatData);
+
+    const chat = await this.chatRepo.createChat(chatData);
+
+    const message = {
+      chatId: chat.id,
+      userId: chat.user_id,
+      subjectId: chat.subject_id,
+      message: chat.message
+    };
+
+    await this.messageBus.publish('chat.exchange', 'chat.created', message);
+    console.log('Message published to RabbitMQ:', message);
+
+    return chat;
   }
 
   async getChatById(chatId: number): Promise<ChatResponseDTO> {
@@ -15,6 +27,19 @@ export default class ChatService {
     const chat = await this.chatRepo.getChatById(chatId);
     if (!chat) {
       throw new Error(`Chat with ID ${chatId} not found`);
+
+      const message = {
+        chatId: chat.id,
+        userId: chat.user_id,
+        subjectId: chat.subject_id,
+        message: chat.message
+      };
+
+
+
+      await this.messageBus.publish('chat.exchange', 'chat.created', message);
+      console.log('Message published to RabbitMQ:', message);
+
     }
     return chat;
   }
@@ -31,18 +56,66 @@ export default class ChatService {
         if (!chat) {
             throw new Error(`Chat with ID ${chatId} not found`);
         }
+
+        const message = {
+            chatId: chat.id,
+            userId: chat.user_id,
+            subjectId: chat.subject_id,
+            message: chat.message
+        };
+        await this.messageBus.publish('chat.exchange', 'chat.deleted', message);
+        console.log('Message published to RabbitMQ:', message);
         return this.chatRepo.deleteChat(chatId);
     }
 
     async getAllChats(): Promise<ChatResponseDTO[]> {
-        return this.chatRepo.getAllChats();
-    }
+        const chats = await this.chatRepo.getAllChats();
+        if (!chats) {
+            throw new Error('No chats found');
+        }
+        const message = {
+            chatId: chats[0].id,
+            userId: chats[0].user_id,
+            subjectId: chats[0].subject_id,
+            message: chats[0].message
+        };
+
+        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        console.log('Message published to RabbitMQ:', message);
+        return chats;
+      }
 
     async getChatsByUserId(userId: number): Promise<ChatResponseDTO[]> {
-        return this.chatRepo.getChatsByUserId(userId);
+        const chats = await this.chatRepo.getChatsByUserId(userId);
+        if (!chats) {
+            throw new Error(`No chats found for user with ID ${userId}`);
+        }
+
+        const message = {
+            chatId: chats[0].id,
+            userId: chats[0].user_id,
+            subjectId: chats[0].subject_id,
+            message: chats[0].message
+        };
+
+        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        console.log('Message published to RabbitMQ:', message);
+        return chats;
     }
 
     async getChatsBySubjectId(subjectId: number): Promise<ChatResponseDTO[]> {
-        return this.chatRepo.getChatBySubjectId(subjectId);
+        const chats = await this.chatRepo.getChatBySubjectId(subjectId);
+        if (!chats) {
+            throw new Error(`No chats found for subject with ID ${subjectId}`);
+        }
+        const message = {
+            chatId: chats[0].id,
+            userId: chats[0].user_id,
+            subjectId: chats[0].subject_id,
+            message: chats[0].message
+        };
+        await this.messageBus.publish('chat.exchange', 'chat.created', message);
+        console.log('Message published to RabbitMQ:', message);
+        return chats;
     }
 }
