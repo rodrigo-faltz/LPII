@@ -71,3 +71,4 @@ export default class MessageRepository {
 
 }
 
+export const messageRepository = new MessageRepository();

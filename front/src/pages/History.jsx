@@ -132,21 +132,6 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
-              {/* {materiaFilter && (
-                <div className="alert alert-info mb-3">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <button 
-                      className="btn btn-sm btn-outline-secondary"
-                      onClick={() => {
-                        window.history.pushState({}, '', '/home/historico');
-                        this.setState({ materiaFilter: null });
-                      }}
-                    >
-                      Limpar filtro
-                    </button>
-                  </div>
-                </div>
-              )} */}
               {!loading && !error && (
                 <HistoryChat 
                   chats={chats} 

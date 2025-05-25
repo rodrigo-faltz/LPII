@@ -44,7 +44,7 @@ async function consumeMessageQueue() {
         const userQuestion = content.message;
         const chatId = content.chatId;
       
-        const botAnswer = await ollamaService.generateResponse(userQuestion);
+        const botAnswer = await ollamaService.generateResponseStream(userQuestion, 'gemma3:4b', chatId);
       
         console.log('[*] Resposta do Ollama gerada:', botAnswer);
       

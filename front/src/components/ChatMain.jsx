@@ -56,7 +56,7 @@ export default function ChatMain({
       console.log("ChatMain: Starting polling for AI response...");
       setIsGenerating(true);
       let attempts = 0;
-      const maxAttempts = 30; // Stop after ~30 seconds
+      const maxAttempts = 90; // Stop after ~30 seconds
 
       pollingIntervalRef.current = setInterval(async () => {
         attempts++;
