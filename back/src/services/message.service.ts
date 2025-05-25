@@ -11,41 +11,7 @@ export default class MessageService {
     private messageRepo = new MessageRepository();
 
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
-        if (messageData.content && messageData.content.length > 500) {
-            throw new Error('Message too long');
-        }
-        if (!messageData.chat_id) {
-            throw new Error('Chat ID is required');
-        }
-        if (!messageData.author_id) {
-            throw new Error('User ID is required');
-        }
 
-        // do not check if the chat exists
-        // const chat = await this.chatRepo.getChatById(messageData.chat_id);
-        // if (!chat) {
-        //     throw new Error(`Chat with ID ${messageData.chat_id} not found`);
-        // }
-
-        // do not check if the user exists
-        // const user = await this.userRepo.getUserById(messageData.author_id);
-        // if (!user) {
-        //     throw new Error(`User with ID ${messageData.author_id} not found`);
-        // }
-
-        // do not check if the subject exists
-        // const subject = await this.subjectRepo.getSubjectById(messageData.subject_id);
-        // if (!subject) {
-        //     throw new Error(`Subject with ID ${messageData.subject_id} not found`);
-        // }
-
-        // do not check if the message exists
-        // const message = await this.messageRepo.getMessageById(messageData.id);
-        // if (message) {
-        //     throw new Error(`Message with ID ${messageData.id} already exists`);
-        // }
-
-        // publish the message to RabbitMQ
         const messagecreated = await this.messageRepo.createMessage(messageData);
         const message = {
             chatId: messageData.chat_id,
