@@ -11,6 +11,7 @@ export default class MessageService {
     private messageRepo = new MessageRepository();
 
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
+
         const messagecreated = await this.messageRepo.createMessage(messageData);
         const message = {
             chatId: messageData.chat_id,
