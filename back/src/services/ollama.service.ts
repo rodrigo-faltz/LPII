@@ -50,6 +50,32 @@ export class OllamaService {
         }
     }
 
+    async generateResponseStream(prompt: string, model: string = 'gemma3:4b'): Promise<string> {
+        try {
+            const response = await axios({
+                method: 'post',
+                url: `${this.baseUrl}/api/chat`,
+                data: {
+                    model,
+                    messages: [
+                        { role: 'system', content: this.basePrompt },
+                        { role: 'user', content: prompt }
+                    ],
+                    stream: true,
+                    temperature: 0.55,
+                },
+                responseType: 'stream'
+            });
+
+            const rawResponse = response.data.response;
+
+            return rawResponse;
+
+        } catch (error) {
+            return 'Ollama mockado';
+        }
+    }
+
     private removeThinkingTags(text: string): string {
         // Remove the "thinking" tags from the response
         return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();

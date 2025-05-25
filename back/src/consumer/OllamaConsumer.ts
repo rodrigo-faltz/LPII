@@ -34,25 +34,33 @@ async function consumeMessageQueue() {
 
     try {
       const content = JSON.parse(msg.content.toString());
-      console.log('[x] Mensagem recebida da fila:', content);
+      console.log('[*] Conteúdo da mensagem:', content);
+      console.log('[*] Conteúdo da authorId:', content.userId);
 
-      const userQuestion = content.message;
-      const chatId = content.chatId;
+      // Verificar se NÃO é uma mensagem do bot
+      if(content.userId !== BOT_AUTHOR_ID && content.userId !== undefined) {
+        console.log('[x] Processando mensagem do usuário:', content);
 
-      const botAnswer = await ollamaService.generateResponse(userQuestion);
+        const userQuestion = content.message;
+        const chatId = content.chatId;
+      
+        const botAnswer = await ollamaService.generateResponse(userQuestion);
+      
+        console.log('[*] Resposta do Ollama gerada:', botAnswer);
+      
+        const newMessageData: MessageCreateDTO = {
+          content: botAnswer,
+          chat_id: chatId,
+          author_id: BOT_AUTHOR_ID,
+        };
+      
+        const createdMessage = await messageRepository.createMessage(newMessageData);
+        console.log('[*] Mensagem do bot salva no banco:', createdMessage);
+      } else {
+        console.log('[!] Ignorando mensagem do bot para evitar loop infinito.');
+      }
 
-      console.log('[*] Resposta do Ollama gerada:', botAnswer);
-
-      const newMessageData: MessageCreateDTO = {
-        content: botAnswer,
-        chat_id: chatId,
-        author_id: BOT_AUTHOR_ID,
-      };
-
-      const createdMessage = await messageRepository.createMessage(newMessageData);
-
-      console.log('[*] Mensagem do bot salva no banco:', createdMessage);
-
+      // Sempre confirma o recebimento da mensagem
       channel.ack(msg);
     } catch (err) {
       console.error('[!] Erro ao processar mensagem da fila:', err);

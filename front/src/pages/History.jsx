@@ -132,10 +132,9 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
-              {materiaFilter && (
+              {/* {materiaFilter && (
                 <div className="alert alert-info mb-3">
                   <div className="d-flex justify-content-between align-items-center">
-                    <span>Filtrando por: <strong>{materiaFilter}</strong></span>
                     <button 
                       className="btn btn-sm btn-outline-secondary"
                       onClick={() => {
@@ -147,7 +146,7 @@ class History extends React.Component {
                     </button>
                   </div>
                 </div>
-              )}
+              )} */}
               {!loading && !error && (
                 <HistoryChat 
                   chats={chats} 
