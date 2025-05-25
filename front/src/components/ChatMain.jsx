@@ -6,6 +6,9 @@ export default function ChatMain({
   inputMessage,
   setInputMessage,
   handleSendMessage: parentHandleSendMessage,
+  chatId,
+  userId,
+
 }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const messagesContainerRef = useRef(null);
@@ -20,12 +23,25 @@ export default function ChatMain({
       return;
     }
 
-    // Call the parent's handleSendMessage to add user message to chat
     console.log("ChatMain: Calling parent handleSendMessage");
     parentHandleSendMessage(e);
 
-    // Now handle the AI response
     try {
+      // if (!chatId || !userId) {
+      //   console.error("ChatMain: Missing chatId or userId", { chatId, userId });
+      // }
+
+      console.log("ChatMain: Saving user message to database...");
+      const responseDb = await axios.post(
+        "http://localhost:3000/api/message", 
+        {
+          content: inputMessage,
+          chat_id: 1, // Mudar para chatId quando implementado
+          author_id: 1, // Mudar para userId quando implementado
+        }
+      );
+      console.log("ChatMain: User message saved to database:", responseDb.data);
+
       console.log("ChatMain: Attempting to call AI API...");
       setIsGenerating(true);
 
@@ -37,13 +53,19 @@ export default function ChatMain({
       );
 
       console.log("ChatMain: AI Response received:", response.data);
+      const aiResponseDb = await axios.post("http://localhost:3000/api/message",
+        {
+          content: response.data.response,
+          chat_id: 1, //Mudar para chatId quando implementado
+          author_id: 0 
+        }
+      );
+      console.log("ChatMain: AI message saved to database", aiResponseDb.data);
 
-      // Create a message object for the AI response
 
-      // Add this to messages by simulating a new message event
       const aiMessageEvent = {
         preventDefault: () => {},
-        aiResponse: response.data.response, // Pass the AI response in the event object
+        aiResponse: response.data.response, 
       };
 
       parentHandleSendMessage(aiMessageEvent, "assistant");
@@ -52,7 +74,7 @@ export default function ChatMain({
       console.error("ChatMain: Error getting AI response:", error);
       setIsGenerating(false);
 
-      // Handle error by adding an error message to the chat
+
       const errorEvent = { preventDefault: () => {} };
 
       setInputMessage("Desculpe, não consegui processar sua solicitação.");
@@ -73,11 +95,12 @@ export default function ChatMain({
     }
   };
 
+  
+
   useEffect(() => {
     testConnection();
   }, []);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (container) {
@@ -101,7 +124,6 @@ export default function ChatMain({
                 : "justify-content-start"
             } mb-3`}
           >
-            {/* Rest of your component remains the same */}
             {message.sender === "assistant" && (
               <div className="message-timestamp small text-muted me-2 align-self-end">
                 {message.timestamp.split(" ")[1]}
