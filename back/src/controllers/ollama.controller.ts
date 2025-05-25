@@ -4,7 +4,7 @@ import { ollamaService } from '../services/ollama.service';
 export const generateResponse = async (req: Request, res: Response) => {
     console.log('Ollama request received:', req.body);
     try {
-        const { prompt, model = 'deepseek-r1:7b' } = req.body;
+        const { prompt, model} = req.body;
         
         if (!prompt) {
             console.log('Missing prompt in request');

@@ -29,7 +29,7 @@ export class OllamaService {
         this.baseUrl = ollamaUrl;
     }
 
-    async generateResponse(prompt: string, model: string = 'deepseek-r1:7b'): Promise<string> {
+    async generateResponse(prompt: string, model: string = 'gemma3:27b'): Promise<string> {
         try {
             const response = await axios.post(
             `${this.baseUrl}/api/generate`,
