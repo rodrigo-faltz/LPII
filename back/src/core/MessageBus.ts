@@ -134,14 +134,14 @@ async initQueues(): Promise<void> {
     await this.model.close();
   }
 
-   async consumeChatCreated(): Promise<void> {
-    await this.channel.consume('chat.queue', async (msg) => {
+   async consumeMessageCreated(): Promise<void> {
+    await this.channel.consume('message.queue', async (msg) => {
       if (!msg) return;
 
       const routingKey = msg.fields.routingKey;
       const content = msg.content.toString();
 
-      if (routingKey === 'chat.created') {
+      if (routingKey === 'message.created') {
         const payload = JSON.parse(content);
         const prompt = payload.message;
 
@@ -158,8 +158,8 @@ async initQueues(): Promise<void> {
           };
 
           await this.channel.publish(
-            'chat.exchange',
-            'chat.responded',
+            'message.exchange',
+            'message.responded',
             Buffer.from(JSON.stringify(respostaPayload))
           );
 

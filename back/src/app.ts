@@ -35,7 +35,7 @@ const BARRAMENTO = new MessageBus({
     await BARRAMENTO.connect();
     console.log('Connected to RabbitMQ');
     await BARRAMENTO.initQueues();
-    
+    await BARRAMENTO.consumeMessageCreated();
 
   } catch (err) {
     console.error('Error connecting to RabbitMQ:', err);

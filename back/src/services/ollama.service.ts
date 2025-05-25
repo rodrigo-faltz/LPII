@@ -20,8 +20,16 @@ export class OllamaService {
         this.baseUrl = ollamaUrl;
     }
 
+    //Precisa consumir o evento de RabbitMQ
+    // e gerar a resposta para o usuário
+    // e publicar a resposta na fila de resposta
+    // e salvar no banco de dados
+
+    
+
     async generateResponse(prompt: string, model: string = 'gemma3:4b'): Promise<string> {
         try {
+            console.log('Ollama gera resposta');
             const response = await axios.post(
             `${this.baseUrl}/api/generate`,
                 {

@@ -2,11 +2,7 @@ import pool from '../config/db';
 import { Message } from '../models/message.model';
 import { MessageCreateDTO } from '../models/message.model';
 import { MessageUpdateDTO } from '../models/message.model';
-import { MessageDeleteDTO } from '../models/message.model';
 
-import { MesssageGetByChatIdDTO } from '../models/message.model';
-
-// import { MessageResponseDTO } from '../models/message.model';
 
 export default class MessageRepository {
     async createMessage(messageData: MessageCreateDTO): Promise<Message> {
@@ -73,12 +69,5 @@ export default class MessageRepository {
         return rows as Message[];
     }
 
-    async getTopMessagesByChatId(chatId: number): Promise<Message[]> {
-        const [rows] = await pool.query(
-            'SELECT * FROM messages WHERE chat_id = ? ORDER BY created_at DESC LIMIT 1',
-            [chatId]
-        );
-        return rows as Message[];
-    }
 }
 
