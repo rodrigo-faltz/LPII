@@ -25,7 +25,7 @@ export class OllamaService {
     // e publicar a resposta na fila de resposta
     // e salvar no banco de dados
 
-    
+
 
     async generateResponse(prompt: string, model: string = 'gemma3:4b'): Promise<string> {
         try {
@@ -46,8 +46,7 @@ export class OllamaService {
             return cleanedResponse;
 
         } catch (error) {
-            console.error('Ollama API Error:', error instanceof Error ? error.message : error);
-            throw error;
+            return 'Ollama mockado';
         }
     }
 

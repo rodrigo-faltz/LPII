@@ -20,14 +20,16 @@ export default class MessageService {
     };
 
     // Certifique-se de usar o mesmo nome do exchange e routing key configurado no consumidor
-    await BARRAMENTO.channel?.publish(
-        'message_exchange',      // nome correto do exchange
-        'message.created',       // routing key
-        Buffer.from(JSON.stringify(message)), // conversão para buffer
-        { persistent: true }     // opcional, garante que a mensagem persista mesmo após restart do broker
-    );
+    if (messageData.author_id !== 0) {
+        await BARRAMENTO.channel?.publish(
+            'message_exchange',      // nome correto do exchange
+            'message.created',       // routing key
+            Buffer.from(JSON.stringify(message)), // conversão para buffer
+            { persistent: true }     // opcional, garante que a mensagem persista mesmo após restart do broker
+        );
 
-    console.log('Message published to RabbitMQ:', message);
+        console.log('Message published to RabbitMQ:', message);
+    }
 
     return messagecreated;
 }
