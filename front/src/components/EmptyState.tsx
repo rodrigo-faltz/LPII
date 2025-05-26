@@ -27,7 +27,7 @@ export const EmptyState = ({
           Limpar filtros
         </button>
       ) : (
-        <Link to="/home/chat" className="btn btn-primary mt-2">
+        <Link to="/home/explorar" className="btn btn-primary mt-2">
           Iniciar uma conversa
         </Link>
       )}

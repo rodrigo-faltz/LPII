@@ -10,7 +10,7 @@ const Sidebar = ({ activeNav, setActiveNav }: SidebarProps) => {
   const navItems = [
     //{ id: "inicio", icon: "bi-house-door", label: "Início" },
     { id: "explorar", icon: "bi-search", label: "Explorar" },
-    { id: "chat", icon: "bi-chat-left-text", label: "Novo Chat" },
+    //{ id: "chat", icon: "bi-chat-left-text", label: "Novo Chat" },
     { id: "historico", icon: "bi-clock-history", label: "Histórico" },
   ];
 

@@ -70,7 +70,6 @@ class History extends React.Component {
       );
 
       const validChats = chatsData.filter((chat) => chat !== null);
-
       this.setState({ chats: validChats });
     } catch (error) {
       const errorMessage = axios.isAxiosError(error)
@@ -132,13 +131,13 @@ class History extends React.Component {
             <Header />
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
-              {!loading && !error && (
                 <HistoryChat 
                   chats={chats} 
                   initialFilter={materiaFilter || "todas"} 
                   onDeleteChat={this.handleDeleteChat}
+                  loading={loading}
+                  error={error}
                 />
-              )}
             </div>
           </div>
         </div>
