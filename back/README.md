@@ -39,7 +39,7 @@ As principais responsabilidades do back-end incluem:
 | **mysql**              | Driver para conexão com MySQL.                           |
 | **dotenv**             | Gerenciamento de variáveis de ambiente.                  |
 | **RabbitMQ (amqplib)** | Barramento de eventos para comunicação assíncrona.       |
-| **axios**              | Cliente HTTP para chamadas externas (ex: Ollama API).    |
+| **axios**              | Cliente HTTP para chamadas externas.                     |
 | **Jest**               | Framework de testes para garantir a qualidade do código. |
 | **Vite**               | Ferramenta moderna para desenvolvimento e build.         |
 
