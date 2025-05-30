@@ -5,7 +5,33 @@ import { LoadingIndicator } from "./LoadingIndicator";
 import { EmptyState } from "./EmptyState";
 import { useChatFilters } from "./../hooks/useChatFilters";
 
-const HistoricoChats = ({ chats = [], initialFilter = "todas", onDeleteChat }) => {
+interface Chat {
+  id: string;
+  title?: string;
+  content?: string;
+  timestamp?: Date | string;
+  // Add other properties your Chat objects have
+}
+
+interface HistoricoChatsProps {
+  chats: Chat[];
+  filterOptions: string[];
+  currentFilter: string;
+  onFilterChange: (filter: string) => void;
+  onDeleteChat: (chatId: string) => void;
+  loading?: boolean;
+  error?: string | null;
+}
+
+const HistoricoChats = ({ 
+  chats = [], 
+  filterOptions = ["todas"],
+  currentFilter = "todas",
+  onFilterChange,
+  onDeleteChat,
+  loading = false,
+  error: externalError = null
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const {
@@ -19,34 +45,32 @@ const HistoricoChats = ({ chats = [], initialFilter = "todas", onDeleteChat }) =
     setSortValue,
   } = useChatFilters({
     initialChats: [],
-    defaultFilter: initialFilter
+    defaultFilter: currentFilter
   });
 
   const fetchChats = () => {
     // Always treat chats as an array, even if empty
     const chatArray = Array.isArray(chats) ? chats : [];
     setChats(chatArray);
-    setIsLoading(false);
+    setIsLoading(loading);
+    setError(externalError);
   };
 
-  // Safe filter options that don't depend on chat properties
-  const filterOptions = ["todas"].sort();
-  
   const sortOptions = [
     { value: "recentes", label: "Mais recentes" },
     { value: "antigos", label: "Mais antigos" },
   ];
 
   useEffect(() => {
-    if (initialFilter && initialFilter !== filterValue) {
-      console.log("Atualizando filtro para:", initialFilter);
-      setFilterValue(initialFilter);
+    if (currentFilter && currentFilter !== filterValue) {
+      console.log("Atualizando filtro para:", currentFilter);
+      setFilterValue(currentFilter);
     }
-  }, [initialFilter, filterValue, setFilterValue]);
+  }, [currentFilter, filterValue, setFilterValue]);
 
   useEffect(() => {
     fetchChats();
-  }, [chats]);
+  }, [chats, loading, externalError]);
 
   return (
     <div className="container-fluid p-4">
@@ -60,7 +84,7 @@ const HistoricoChats = ({ chats = [], initialFilter = "todas", onDeleteChat }) =
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         filterValue={filterValue}
-        onFilterChange={setFilterValue}
+        onFilterChange={onFilterChange}
         sortValue={sortValue}
         onSortChange={(value: string) =>
           setSortValue(value as "recentes" | "antigos")
@@ -84,7 +108,7 @@ const HistoricoChats = ({ chats = [], initialFilter = "todas", onDeleteChat }) =
               filterValue={filterValue}
               onClearFilters={() => {
                 setSearchTerm("");
-                setFilterValue("todas");
+                onFilterChange("todas");
               }}
             />
           }

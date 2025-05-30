@@ -57,6 +57,48 @@ class History extends React.Component {
     }
   };
 
+    getFilteredChats = () => {
+      const { chats, materiaFilter } = this.state;
+      
+      if (!materiaFilter || materiaFilter === "todas") {
+        return chats;
+      }
+
+      return chats.filter(chat => 
+        chat.materia && chat.materia.toLowerCase() === materiaFilter.toLowerCase()
+      );
+    };
+
+  getFilterOptions = () => {
+    const { chats } = this.state;
+    
+    if (!Array.isArray(chats) || chats.length === 0) {
+      return ["todas"];
+    }
+    
+    const materias = new Set(
+      chats
+        .map(chat => chat.materia)
+        .filter(materia => Boolean(materia))
+    );
+    
+    return ["todas", ...Array.from(materias)].sort();
+  };
+
+  handleFilterChange = (newFilter) => {
+    this.setState({ materiaFilter: newFilter });
+    
+    // Update URL to reflect the filter
+    const url = new URL(window.location);
+    if (newFilter && newFilter !== "todas") {
+      url.searchParams.set('materia', newFilter);
+    } else {
+      url.searchParams.delete('materia');
+    }
+    window.history.replaceState({}, '', url);
+  };
+
+
   handleChats = async () => {
     try {
       this.setState({ loading: true, error: null });
@@ -117,7 +159,9 @@ class History extends React.Component {
   }
 
   render() {
-    const { chats, loading, error, materiaFilter } = this.state;
+    const { loading, error, materiaFilter } = this.state;
+    const filteredChats = this.getFilteredChats();
+    const filterOptions = this.getFilterOptions();
 
     return (
       <div className="container-fluid p-0 vh-100">
@@ -132,8 +176,10 @@ class History extends React.Component {
 
             <div className="container-fluid p-4 flex-grow-1 overflow-auto">
                 <HistoryChat 
-                  chats={chats} 
-                  initialFilter={materiaFilter || "todas"} 
+                  chats={filteredChats}
+                  filterOptions={filterOptions}
+                  currentFilter={materiaFilter || "todas"}
+                  onFilterChange={this.handleFilterChange}
                   onDeleteChat={this.handleDeleteChat}
                   loading={loading}
                   error={error}
