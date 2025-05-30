@@ -67,7 +67,7 @@ O backend possui testes automatizados usando Jest para garantir a confiabilidade
 
 ## Como Rodar o Projeto
 
-1. nstale as dependências:
+1. Instale as dependências:
 
 ```bash
 npm install
