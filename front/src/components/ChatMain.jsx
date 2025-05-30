@@ -63,7 +63,7 @@ export default function ChatMain({
         console.log(`Polling attempt ${attempts}/${maxAttempts}`);
         
         await loadChatHistory();
-        
+
         // If we've waited too long, stop polling
         if (attempts >= maxAttempts) {
           if (pollingIntervalRef.current) {
@@ -123,7 +123,15 @@ export default function ChatMain({
         console.log("ChatMain: Nenhuma mensagem encontrada para este chat");
       }
     } catch (error) {
-      console.error("ChatMain: Erro ao carregar histórico de mensagens:", error);
+      if (error.response?.status === 403) {
+        alert("Você não tem permissão para acessar este chat.");
+        window.location.href = "/home/historico"; // ou redirecionar para outro lugar seguro
+      } else {
+        console.error(
+          "ChatMain: Erro ao carregar histórico de mensagens:",
+          error
+        );
+      }
     }
   };
 
