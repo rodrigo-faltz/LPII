@@ -1,6 +1,6 @@
-import {Request, Response} from 'express';
-import ChatService from '../services/chat.service';
+import { Request, Response } from 'express';
 import { CustomRequest } from '../types/types';
+import ChatService from '../services/chat.service';
 import { ChatCreateDTO, ChatUpdateDTO } from '../models/chat.model';
 import { AppError } from '../types/custom-error';
 import { ChatResponseDTO } from '../models/chat.model';
@@ -24,11 +24,15 @@ export default class ChatController {
         }
     }
 
-    async getChatById(req: Request, res: Response) {
+    async getChatById(req: CustomRequest, res: Response) {
         try {
             const chatId = parseInt(req.params.id, 10);
             const chat = await this.chatService.getChatById(chatId);
-            res.json(chat);
+            // Only allow owner
+            if (!req.user || req.user.id !== chat.user_id) {
+                return res.status(403).json({ error: 'Acesso negado' });
+            }
+            return res.json(chat);
         } catch (error) {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
@@ -80,16 +84,20 @@ export default class ChatController {
         }
     }
 
-    async getChatsByUserId(req: Request, res: Response) {
+    async getChatsByUserId(req: CustomRequest, res: Response) {
         try {
             const userId = parseInt(req.params.userId, 10);
+            // only allow current user
+            if (!req.user || req.user.id !== userId) {
+                return res.status(403).json({ message: 'Acesso negado' });
+            }
             const chats = await this.chatService.getChatsByUserId(userId);
-            res.json(chats);
+            return res.json(chats);
         } catch (error) {
             if (error instanceof AppError) {
-                res.status(error.statusCode).json({ message: error.message });
+                return res.status(error.statusCode).json({ message: error.message });
             } else {
-                res.status(200).json({ message: 'Não há chats disponíveis para este usuário.' });
+                return res.status(200).json({ message: 'Não há chats disponíveis para este usuário.' });
             }
         }
     }

@@ -1,6 +1,8 @@
-import {Request, Response} from 'express';
-import {MessageCreateDTO, MessageUpdateDTO} from '../models/message.model';
-import {BARRAMENTO} from '../app';
+import { Request, Response } from 'express';
+import { CustomRequest } from '../types/types';
+import ChatService from '../services/chat.service';
+import { MessageCreateDTO, MessageUpdateDTO } from '../models/message.model';
+import { BARRAMENTO } from '../app';
 import MessageRepository from '../repositories/message.repository';
 import MessageService from '../services/message.service';
 
@@ -64,9 +66,19 @@ export default class MessageController {
         }
     }
 
-    async getMessagesByChatId(req: Request, res: Response): Promise<Response> {
+    // Only owner of chat can list its messages
+    async getMessagesByChatId(req: CustomRequest, res: Response): Promise<Response> {
         try {
             const chatId = parseInt(req.params.chatId, 10);
+            if (!req.user) {
+                return res.status(401).json({ error: 'Necessário autenticação' });
+            }
+            // check chat ownership
+            const chatService = new ChatService();
+            const chat = await chatService.getChatById(chatId);
+            if (chat.user_id !== req.user.id) {
+                return res.status(403).json({ error: 'Acesso negado' });
+            }
             const messages = await this.messageService.getMessagesByChatId(chatId);
             return res.status(200).json(messages);
         } catch (error) {
