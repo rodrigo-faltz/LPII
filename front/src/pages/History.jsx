@@ -106,21 +106,28 @@ class History extends React.Component {
         `/chat/user/${localStorage.getItem("userId")}`
       );
       const chats = userChatsRes.data;
-
+      
+      console.log("Dados recebidos do servidor:", chats); // Para debug
+      
+      // Verificar se chats é um array válido
+      if (!chats || !Array.isArray(chats) || chats.length === 0) {
+        this.setState({ chats: [], loading: false });
+        return;
+      }
+      
       const chatsData = await Promise.all(
         chats.map((chat) => this.fetchChatData(chat))
       );
-
+    
       const validChats = chatsData.filter((chat) => chat !== null);
-      this.setState({ chats: validChats });
+      this.setState({ chats: validChats, loading: false });
     } catch (error) {
+      console.error("Erro ao carregar chats:", error);
       const errorMessage = axios.isAxiosError(error)
         ? error.response?.data?.message || "Erro ao carregar históricos"
         : "Erro inesperado";
-
-      this.setState({ error: errorMessage });
-    } finally {
-      this.setState({ loading: false });
+    
+      this.setState({ error: errorMessage, loading: false });
     }
   };
 

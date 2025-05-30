@@ -98,7 +98,7 @@ const HistoricoChats = ({
         <LoadingIndicator message="Carregando seu histórico..." />
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
-      ) : (
+      ) :   (
         <ChatList
           chats={filteredChats}
           onDeleteChat={onDeleteChat}
