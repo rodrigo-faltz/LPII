@@ -12,6 +12,7 @@ export default function ChatMain({
   userId,
 }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const messagesContainerRef = useRef(null);
   const pollingIntervalRef = useRef(null); // Store the interval reference
   const lastMessageCountRef = useRef(0); // Track number of messages to detect new ones
@@ -124,6 +125,12 @@ export default function ChatMain({
       }
     } catch (error) {
       console.error("ChatMain: Erro ao carregar histórico de mensagens:", error);
+      // Handle authorization error
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        setError("Acesso negado: você não tem permissão para este chat.");
+      } else {
+        setError("Erro ao carregar histórico. Tente novamente mais tarde.");
+      }
     }
   };
 
@@ -179,6 +186,11 @@ export default function ChatMain({
   }, [chatId]); // Carrega o histórico quando o chatId muda
 
   return (
+    error ? (
+      <div className="h-100 d-flex justify-content-center align-items-center">
+        <div className="alert alert-danger">{error}</div>
+      </div>
+    ) : (
     <div className="d-flex flex-column h-100 overflow-hidden">
       <div
         ref={messagesContainerRef}
@@ -247,5 +259,6 @@ export default function ChatMain({
         </form>
       </div>
     </div>
+    )
   );
 }
