@@ -123,15 +123,15 @@ export default function ChatMain({
         console.log("ChatMain: Nenhuma mensagem encontrada para este chat");
       }
     } catch (error) {
-      if (error.response?.status === 403) {
-        alert("Você não tem permissão para acessar este chat.");
-        window.location.href = "/home/historico"; // ou redirecionar para outro lugar seguro
-      } else {
-        console.error(
-          "ChatMain: Erro ao carregar histórico de mensagens:",
-          error
-        );
-      }
+      const status = error.response?.status;
+    if (status === 403) {
+      alert("Você não tem permissão para acessar este chat.");
+    } else if (status === 404) {
+      alert("Esse chat não existe.");
+    } else {
+      console.error("ChatMain: Erro ao carregar histórico de mensagens:", error);
+    }
+    window.location.href = "/home/historico"; // redireciona para uma página segura
     }
   };
 
