@@ -2,8 +2,12 @@ import { ollamaService } from '../services/ollama.service';
 import { MessageCreateDTO } from '../models/message.model';
 import MessageRepository from '../repositories/message.repository';
 import { BARRAMENTO } from '../app';
+import ChatRepository from '../repositories/chat.repository'; 
+import SubjectRepository from '../repositories/subject.repository'
 
 const messageRepository = new MessageRepository();
+const chatRepository = new ChatRepository(); 
+const subjectRepository = new SubjectRepository();
 
 const EXCHANGE_NAME = 'message_exchange';
 const ROUTING_KEY = 'message.created';
@@ -43,8 +47,20 @@ async function consumeMessageQueue() {
 
         const userQuestion = content.message;
         const chatId = content.chatId;
-      
-        const botAnswer = await ollamaService.generateResponseStream(userQuestion, 'gemma3:4b', chatId);
+
+        const chat = await chatRepository.getChatById(chatId);
+        if (!chat) {
+          console.error('[!] Chat não encontrado:', chatId);
+          channel.ack(msg);
+          return;
+        }
+
+        const subject = await subjectRepository.getSubjectById(chat.subject_id);
+        const subjectName = subject?.name || 'Unknown Subject';
+        
+        console.log('[*] Nome da matéria:', subjectName);
+        
+        const botAnswer = await ollamaService.generateResponseStream(userQuestion, 'gemma3:4b', chatId, subjectName);
       
         console.log('[*] Resposta do Ollama gerada:', botAnswer);
       
@@ -53,6 +69,8 @@ async function consumeMessageQueue() {
           chat_id: chatId,
           author_id: BOT_AUTHOR_ID,
         };
+
+
       
         const createdMessage = await messageRepository.createMessage(newMessageData);
         console.log('[*] Mensagem do bot salva no banco:', createdMessage);
