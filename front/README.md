@@ -564,7 +564,7 @@ Esse componente é o cabeçalho fixo que identifica o usuário logado, fornece f
         * Chama `onDeleteChat` quando o usuário opta por excluir uma conversa.
 
 ---
-**Serviços**
+# Serviços
 Nesta seção será explicado como funcionam os serviços necessários para o funcionamento correto da aplicação.
 
 **src/services/auth.ts**
