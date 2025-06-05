@@ -9,7 +9,7 @@
 3. [Arquivos Iniciais](#arquivos-iniciais)
 4. [Páginas](#páginas)
 5. [Componentes](#componentes)
-6. [Serviçõs](#serviços)
+6. [Serviços](#serviços)
 
 ---
 ## Descrição
@@ -56,7 +56,7 @@ front/
 </pre>
 
 ---
-## Arquivos iniciais
+## Arquivos Iniciais
 Nesta seção será explicado o funcionamento dos arquivos que iniciam o funcionamento da aplicação.
 
 ## front/index.html
