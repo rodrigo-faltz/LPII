@@ -41,7 +41,6 @@ As principais responsabilidades do back-end incluem:
 | **RabbitMQ (amqplib)** | Barramento de eventos para comunicação assíncrona.       |
 | **axios**              | Cliente HTTP para chamadas externas.                     |
 | **Jest**               | Framework de testes para garantir a qualidade do código. |
-| **Vite**               | Ferramenta moderna para desenvolvimento e build.         |
 
 ## Como o Back-end Funciona
 `Autenticação e Autorização`:
