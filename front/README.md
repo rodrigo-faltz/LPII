@@ -6,8 +6,11 @@
 ### Índice
 1. [Descrição](#descrição)
 2. [Diretório](#diretório)
-3. [Arquivos Importantes](#arquivos-importantes)
-
+3. [Arquivos Iniciais](#arquivos-iniciais)
+4. [Páginas](#páginas)
+5. [Componentes](#componentes)
+6. [Serviços](#serviços)
+7. [Filtros](#filtros)
 ---
 ## Descrição
 O front-end do projeto consiste em uma aplicação web responsiva desenvolvida em React, que integra um chatbot inteligente para auxiliar estudantes do ensino médio em suas disciplinas curriculares (Matemática, Português, Ciências, etc.). A interface é projetada para ser intuitiva, acessível e focada na interação natural com o assistente virtual.
@@ -26,36 +29,56 @@ O front-end do projeto consiste em uma aplicação web responsiva desenvolvida e
 
 ## Diretório
 <pre>
-front/
-├── src/
-│   ├── components/
+front
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── components
+│   │   ├── ChatList.tsx
+│   │   ├── ChatMain.jsx
+│   │   ├── EmptyState.tsx
+│   │   ├── Filter
+│   │   │   ├── FilterBar.tsx
+│   │   │   ├── FilterDropdown.tsx
+│   │   │   ├── SearchBar.tsx
+│   │   │   └── SearchFilterBar.tsx
 │   │   ├── Header.tsx
+│   │   ├── HistoryChat.tsx
+│   │   ├── LoadingIndicator.tsx
 │   │   ├── LoginForm.jsx
 │   │   ├── RegisterForm.jsx
 │   │   ├── Sidebar.tsx
 │   │   ├── SubjectCard.tsx
 │   │   └── SubjectsSection.tsx
-│   ├── pages/
-│   │   ├── Dashboard.jsx
+│   ├── hooks
+│   │   └── useChatFilters.ts
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── Chat.jsx
+│   │   ├── Explore.jsx
+│   │   ├── History.jsx
+│   │   ├── Home.jsx
 │   │   ├── Login.jsx
 │   │   └── Register.jsx
-│   ├── App.css
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── .env.test
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── README.md
+│   ├── services
+│   │   ├── AuthContext.jsx
+│   │   └── auth.ts
+│   ├── types
+│   │   └── index.ts
+│   └── utils
+│       └── formaters.ts
 └── vite.config.js
 </pre>
 
 ---
-
----
-## Arquivos importantes
+## Arquivos Iniciais
+Nesta seção será explicado o funcionamento dos arquivos que iniciam o funcionamento da aplicação.
 
 ## front/index.html
 
@@ -64,7 +87,6 @@ Este é um arquivo HTML básico que serve como o ponto de entrada para a aplica�
 ## front/vite.config.js
 Esse código é um arquivo de configuração do Vite para o projeto. Ele define as configurações básicas necessárias para o Vite funcionar corretamente com o React.
 
----
 ## src/main.jsx
 Este código é o ponto de entrada principal da aplicação.
 
@@ -72,12 +94,12 @@ Este código é o ponto de entrada principal da aplicação.
 - Usa createRoot para renderizar o componente <App /> dentro de StrictMode;
 - Carrega CSS global e do Bootstrap;
 - StrictMode ajuda a depurar problemas durante o desenvolvimento.
----
+
 
 ## src/index.css
 Este é um arquivo CSS que define os estilos para toda a aplicação, com foco especial em formulários, cards, sidebar e um sistema de chat.
 
----
+
 ## src/App.css
 Este código é um arquivo CSS que define os estilos para um componente de teste de API (API Tester) para a aplicação.
 ### Estrutura Geral
@@ -86,17 +108,17 @@ Este código é um arquivo CSS que define os estilos para um componente de teste
 - Grupos de botões;
 - Botões individuais;
 - Caixa de exibição de respostas.
----
+
 
 ## src/App.jsx
 Este arquivo é o núcleo da aplicação com autenticação e roteamento.
 
 ### Estrutura Principal
-1. **Configuração de Rotas**:
+1. Configuração de Rotas:
    - Utiliza `react-router-dom` para gerenciamento de navegação
    - Possui rotas públicas (Login, Registro) e privadas (área logada)
 
-2. **Autenticação**:
+2. Autenticação:
    - Implementa um sistema de autenticação via `AuthProvider`
    - Usa o componente `PrivateRoute` para proteger rotas
 
@@ -339,7 +361,7 @@ Esse componente é um formulário de registro completo que valida dados no clien
     - Navegação auxiliar
       Link para voltar ao login se o usuário já tiver conta.
 
-    ## src/Component/LoadingIndicator.tsx
+    ## src/Components/LoadingIndicator.tsx
     Esse é um componente reutilizável que sinaliza operações assíncronas ou telas em espera, podendo ser colocado em qualquer parte da aplicação React.
 
     - Funcionalidades:
@@ -351,7 +373,7 @@ Esse componente é um formulário de registro completo que valida dados no clien
 
       - Acessibilidade — inclui um rótulo invisível para leitores de tela, garantindo que usuários com deficiência visual também sejam notificados de que há                 conteúdo sendo carregado.
 
-    ## src/Component/Sidebar.tsx
+    ## src/Components/Sidebar.tsx
     Esse componente exibe uma barra lateral de navegação que mostra o nome da aplicação no topo, lista os botões “Explorar” e “Histórico”, cada um com ícone, destaca visualmente o item correspondente à página atual eleva o usuário à rota certa quando clicado e avisa o restante da aplicação de qual item ficou ativo.
 
     - Funcionalidades:
@@ -379,7 +401,7 @@ Esse componente é um formulário de registro completo que valida dados no clien
       - Estrutura semântica simples
         - Usa uma lista vertical (ul/li) para acessibilidade, além de texto de apoio (“Descobrir”) como cabeçalho da seção de navegação.
         
-    ## src/Component/SubjectCard.tsx
+    ## src/Components/SubjectCard.tsx
       Esse o componente representa visualmente uma disciplina e oferece dois atalhos: iniciar um novo chat sobre ela ou ver o histórico de conversas já existentes.
 
       - Funcionalidades:
@@ -397,7 +419,7 @@ Esse componente é um formulário de registro completo que valida dados no clien
 
           - Controle interno de estado
             - Mantém um showDropdown para exibir ou esconder o menu sem propagar cliques indesejados para o card.
-    ## src/Component/SubjectSection.tsx
+    ## src/Components/SubjectSection.tsx
     Esse é um contêiner reutilizável que exibe várias disciplinas em formato de grade, com título personalizável e responsividade embutida.
     - Funcionalidade:
       - Agrupa cartões de disciplinas
@@ -417,3 +439,197 @@ Esse componente é um formulário de registro completo que valida dados no clien
 
     - Tamanho dos cartões
       - Repassa a prop size (“large” ou “small”) para que cada SubjectCard ajuste seu layout.
+     
+   ## src/Components/ChatList.tsx
+   Esse é um componente reutilizável que apresenta o histórico de chats, com opção de navegação e exclusão individual.
+   - Funcionalidade:
+
+   * Lista de conversas
+     Recebe um array de objetos-chat; se a lista estiver vazia, exibe um componente de *empty-state* passado pelo pai.
+   
+   * Exibição de cada chat
+     Para cada item mostra:
+   
+     * a última mensagem (cortada em uma linha, em negrito);
+     * um *badge* com o nome da matéria;
+     * a linha inteira é clicável e leva à rota `/home/chat/{id}`.
+   
+   * Exclusão opcional
+     Se o pai fornecer a função `onDeleteChat`, cada item ganha um botão “Excluir” que:
+   
+        1. pede confirmação ao usuário;
+        2. chama o callback com o ID do chat selecionado;
+        3. impede que o clique no botão acione o link de navegação.
+   
+   * Layout
+     Usa classes Bootstrap: cartões sem borda, `list-group` para a lista, itens com `stretched-link` para tornar toda a área clicável e manter o botão de exclusão funcional.
+
+     ## src/Components/ChatMain.tsx
+     Esse componente implementa toda a lógica de exibição, envio e atualização em tempo real do chat, coordenando chamadas REST para persistir mensagens e acompanhar a resposta gerada pela IA.
+
+     - Funcionalidades
+
+      * Interface de conversa
+        Exibe as mensagens de um chat (com bolhas alinhadas à direita para o usuário e à esquerda para o assistente) e mantém a rolagem sempre no final quando chegam novas mensagens.
+      
+      * Envio de mensagens do usuário
+        Ao submeter o formulário:
+      
+        1. Adiciona a mensagem imediatamente à tela (via callback do componente pai).
+        2. Salva a mensagem no banco através da API `/message`.
+      
+      * Criação do fluxo do assistente
+        Depois de registrar a mensagem do usuário:
+      
+        * limpa qualquer *polling* anterior;
+        * inicia um *polling* a cada segundo (por até ± 30 s) pedindo o histórico do chat até detectar que surgiu uma resposta do assistente;
+        * quando a resposta aparece, encerra o *polling* e desativa o estado “Processando…”.
+      
+      * Carregamento e sincronização do histórico
+      
+        * Sempre que o componente monta ou o `chatId` muda, busca toda a conversa na rota `/message/chat/{chatId}`.
+        * Converte cada mensagem recebida em objeto próprio (`sender` = user ou assistant) e repassa ao estado do componente pai.
+      
+      * Verificação de saúde da API
+        Faz um ping a `/health` na montagem para confirmar que o backend está online.
+      
+      * Tratamento de erros
+        Mostra alertas se o chat não existir (404) ou se o usuário não tiver permissão (403), redirecionando para o histórico em seguida. Erros gerais geram uma mensagem automática de desculpas do assistente.
+      
+      * Experiência do usuário
+      
+        * Botão Enviar exibe spinner e fica desativado enquanto aguarda a resposta do modelo.
+        * Campo de texto limpa-se após cada envio.
+        * Conteúdo das mensagens suporta Markdown (via `react-markdown`).
+
+ ## src/Components/EmptyState.tsx
+Esse componente, em essência, é um aviso de “nada para mostrar”. Ele detecta se o usuário aplicou filtros ou não encontrou conversas e exibe um ícone e uma frase explicando o motivo (filtros sem resultado ou nenhum chat iniciado) e oferece uma ação apropriada: Limpar filtros se busca/filtro estiverem ativos ou ir para “Explorar” para começar a primeira conversa quando não há filtros.
+
+   - Funcionalidades:
+
+   * Tela de “nada encontrado”
+     Exibe um ícone e uma mensagem quando não há conversas para mostrar.
+   
+   * Texto dinâmico
+     Mostra duas variantes:
+   
+     * Se há termo de busca ou filtro aplicado → avisa que nenhum resultado corresponde aos filtros.
+     * Caso contrário → informa que o usuário ainda não começou nenhuma conversa.
+   
+   * Ação contextual
+   
+     * Quando filtros estão ativos, oferece um botão “Limpar filtros” que dispara o callback `onClearFilters`.
+     * Quando não há filtros, exibe um botão “Iniciar uma conversa” que leva o usuário à página de Explorar para começar um novo chat.
+   
+   * Layout centralizado
+     Todo o conteúdo fica alinhado ao centro com espaçamento vertical agradável (`py-5`) e utiliza ícone da biblioteca Bootstrap Icons para reforçar o estado vazio.
+
+## src/Components/Header.tsx
+Esse componente é o cabeçalho fixo que identifica o usuário logado, fornece feedback de carregamento e oferece a opção de logout com redirecionamento.
+
+- Funcionalidades:
+
+   * Configuração de API
+     Define a URL base do Axios e anexa o token salvo no `localStorage` ao cabeçalho `Authorization`, garantindo que todas as requisições desse componente cheguem autenticadas.
+   
+   * Busca do perfil
+     Assim que o componente monta, faz `GET /auth/profile` para obter nome de usuário e ID.
+   
+     * Exibe um spinner enquanto a chamada está em andamento.
+     * Quando retorna, mostra o nome do usuário na barra e grava `userId` no `localStorage` para que outros componentes possam reutilizá-lo.
+   
+   * Barra superior (header)
+     Fica alinhada à direita com:
+   
+     1. Username (ou spinner de carregamento).
+     2. Um avatar genérico que abre um menu dropdown.
+   
+   * Dropdown de opções
+     Atualmente só contém o item “Sair”. Ao clicar:
+   
+     * Chama a função `logout()` (que limpa token e dados de sessão).
+     * Redireciona imediatamente para `/login`.
+   
+   * Tratamento de erros
+     Guarda mensagens de erro em `state.error` se a requisição ao perfil falhar, embora o texto não seja mostrado na interface (pode ser usado depois).
+
+  ## src/Components/HistoryChat.tsx
+  Esse é o contêiner que orquestra carregamento, filtragem, exibição e limpeza do histórico de chats, fornecendo uma experiência completa e responsiva de navegação pelos registros de conversa.
+  - Funcionalidades:
+
+      * Centraliza o “Histórico de Conversas”: recebe do componente pai a lista de chats, o filtro de matéria, estados de *loading* e erro e transforma tudo em uma interface completa de pesquisa e gestão.
+      
+      * Aplica filtros, busca e ordenação: delega a lógica ao hook `useChatFilters`, que mantém:
+      
+        * texto de busca,
+        * filtro de matéria,
+        * ordenação (mais recentes ↔ mais antigos),
+        * lista de chats já filtrada.
+      
+      * Sincroniza estado externo com interno: sempre que chegam novas conversas, muda o filtro atual ou o pai sinaliza carregamento/erro, o componente atualiza seus próprios estados (`isLoading`, `error`, `filteredChats`).
+      
+      * Interface do usuário
+      
+        1. Cabeçalho fixo – “Histórico de Conversas”.
+        2. Barra de busca/filtro – permite digitar, escolher matéria e ordenar.
+        3. Conteúdo variável
+      
+           * Spinner enquanto `loading` for verdadeiro.
+           * Alerta de erro se houver falha.
+           * Lista de chats (com botão de excluir) quando houver resultados.
+           * EmptyState se a lista estiver vazia, oferecendo limpar filtros ou começar nova conversa.
+      
+      * Funções repassadas ao pai
+      
+        * Notifica `onFilterChange` sempre que o usuário troca o filtro.
+        * Chama `onDeleteChat` quando o usuário opta por excluir uma conversa.
+
+---
+# Serviços
+Nesta seção será explicado como funcionam os serviços necessários para o funcionamento correto da aplicação.
+
+**src/services/auth.ts**
+Esse serviço é um utilitário simples para controlar login, logout e checagem de sessão usando o armazenamento local do navegador.
+- Funcionalidades:
+
+   * **`login(token)`** – grava o *token* de autenticação no `localStorage`, marcando o usuário como logado.
+      
+   * **`logout()`** – remove esse *token* do `localStorage`, encerrando a sessão.
+      
+   * **`isAuthenticated()`** – verifica se o *token* está presente; devolve `true` se o usuário ainda está autenticado e `false` caso contrário.
+
+**src/services/AuthContext.jsx**
+  Esse serviço define um contexto de autenticação para React. Ele cria um estado que verifica se já existe um token no localStorage; se houver, considera o usuário logado. 
+
+  * Funcionalidades:
+      
+      * Cria um contexto global de autenticação**
+        Permite que qualquer componente da aplicação saiba se o usuário está logado e acesse funções de login ou logout sem precisar passar props manualmente.
+      
+      * Estado interno `authenticated`
+        É iniciado verificando se já existe token no `localStorage`.
+      
+        * `true` → usuário autenticado.
+        * `false` → sessão inexistente ou encerrada.
+      
+      * Função `login(token)`
+        Salva o token no `localStorage` e muda o estado para autenticado, propagando a informação a todos os componentes que usam o contexto.
+      
+      * Função `logout()`
+        Remove o token, define o estado como não autenticado e faz com que partes da UI que dependem de login reajam automaticamente.
+      
+      * Provedor de contexto
+        Encapsula a aplicação (ou seção dela) e expõe `{ authenticated, login, logout }` no valor do contexto.
+      
+      * Hook `useAuth()`
+        Facilita o consumo do contexto; basta chamá-lo em qualquer componente para obter o status de autenticação e as funções de login/logout.
+      
+      ---
+    # Filtros
+
+Esse conjunto de arquivos implementa a barra de busca, filtro e ordenação do histórico de conversas. O componente SearchFilterBar agrupa três controles       responsivos: um campo de pesquisa (SearchBar) que captura texto livre, um seletor genérico (FilterDropdown) para filtrar por matéria e outro seletor para ordenar (mais recentes ou mais antigos). O hook useChatFilters recebe a lista bruta de chats, o termo digitado, o filtro de matéria e a ordem escolhida, aplica tudo em tempo real (filtro por matéria, busca pelo termo na matéria ou na última mensagem e ordenação cronológica) e devolve a coleção já filtrada e ordenada, além de setters para que os controles da barra atualizem o estado. Em conjunto, esses componentes fornecem uma interface reutilizável para pesquisar, filtrar e classificar as conversas, destacando apenas os resultados que correspondem aos critérios do usuário.
+      
+      
+      
+      
+      
