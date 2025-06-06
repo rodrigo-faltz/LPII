@@ -29,29 +29,50 @@ O front-end do projeto consiste em uma aplicação web responsiva desenvolvida e
 
 ## Diretório
 <pre>
-front/
-├── src/
-│   ├── components/
+front
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── components
+│   │   ├── ChatList.tsx
+│   │   ├── ChatMain.jsx
+│   │   ├── EmptyState.tsx
+│   │   ├── Filter
+│   │   │   ├── FilterBar.tsx
+│   │   │   ├── FilterDropdown.tsx
+│   │   │   ├── SearchBar.tsx
+│   │   │   └── SearchFilterBar.tsx
 │   │   ├── Header.tsx
+│   │   ├── HistoryChat.tsx
+│   │   ├── LoadingIndicator.tsx
 │   │   ├── LoginForm.jsx
 │   │   ├── RegisterForm.jsx
 │   │   ├── Sidebar.tsx
 │   │   ├── SubjectCard.tsx
 │   │   └── SubjectsSection.tsx
-│   ├── pages/
-│   │   ├── Dashboard.jsx
+│   ├── hooks
+│   │   └── useChatFilters.ts
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── Chat.jsx
+│   │   ├── Explore.jsx
+│   │   ├── History.jsx
+│   │   ├── Home.jsx
 │   │   ├── Login.jsx
 │   │   └── Register.jsx
-│   ├── App.css
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── .env.test
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── README.md
+│   ├── services
+│   │   ├── AuthContext.jsx
+│   │   └── auth.ts
+│   ├── types
+│   │   └── index.ts
+│   └── utils
+│       └── formaters.ts
 └── vite.config.js
 </pre>
 
