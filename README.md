@@ -41,109 +41,119 @@ Seu objetivo principal é tornar o aprendizado acessível e adaptativo, com modo
 
 ```
 LPII
-├─ back
-│  ├─ jest.config.js
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ README.md
-│  ├─ src
-│  │  ├─ app.ts
-│  │  ├─ config
-│  │  │  └─ db.ts
-│  │  ├─ consumer
-│  │  │  └─ OllamaConsumer.ts
-│  │  ├─ controllers
-│  │  │  ├─ auth.controller.ts
-│  │  │  ├─ chat.controller.ts
-│  │  │  ├─ message.controller.ts
-│  │  │  ├─ ollama.controller.ts
-│  │  │  └─ subject.controller.ts
-│  │  ├─ core
-│  │  │  └─ MessageBus.ts
-│  │  ├─ index.ts
-│  │  ├─ middleware
-│  │  │  ├─ auth.middleware.ts
-│  │  │  ├─ error.middleware.ts
-│  │  │  └─ logger.middleware.ts
-│  │  ├─ models
-│  │  │  ├─ chat.model.ts
-│  │  │  ├─ message.model.ts
-│  │  │  ├─ subject.model.ts
-│  │  │  └─ user.model.ts
-│  │  ├─ repositories
-│  │  │  ├─ chat.repository.ts
-│  │  │  ├─ message.repository.ts
-│  │  │  ├─ subject.repository.ts
-│  │  │  └─ user.repository.ts
-│  │  ├─ services
-│  │  │  ├─ auth.service.ts
-│  │  │  ├─ chat.service.ts
-│  │  │  ├─ message.service.ts
-│  │  │  ├─ ollama.service.ts
-│  │  │  └─ subject.service.ts
-│  │  ├─ test
-│  │  │  └─ test-server.ts
-│  │  ├─ types
-│  │  │  ├─ auth-types.ts
-│  │  │  ├─ custom-error.ts
-│  │  │  └─ types.d.ts
-│  │  ├─ utils
-│  │  │  ├─ bcrypt.ts
-│  │  │  └─ jwt.ts
-│  │  └─ validation
-│  │     └─ auth.validator.ts
-│  ├─ tests
-│  │  ├─ integration
-│  │  └─ unit
-│  │     └─ services
-│  └─ tsconfig.json
-├─ front
-│  ├─ eslint.config.js
-│  ├─ index.html
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ README.md
-│  ├─ src
-│  │  ├─ App.css
-│  │  ├─ App.jsx
-│  │  ├─ components
-│  │  │  ├─ ChatList.tsx
-│  │  │  ├─ ChatMain.jsx
-│  │  │  ├─ EmptyState.tsx
-│  │  │  ├─ Filter
-│  │  │  │  ├─ FilterBar.tsx
-│  │  │  │  ├─ FilterDropdown.tsx
-│  │  │  │  ├─ SearchBar.tsx
-│  │  │  │  └─ SearchFilterBar.tsx
-│  │  │  ├─ Header.tsx
-│  │  │  ├─ HistoryChat.tsx
-│  │  │  ├─ LoadingIndicator.tsx
-│  │  │  ├─ LoginForm.jsx
-│  │  │  ├─ RegisterForm.jsx
-│  │  │  ├─ Sidebar.tsx
-│  │  │  ├─ SubjectCard.tsx
-│  │  │  └─ SubjectsSection.tsx
-│  │  ├─ hooks
-│  │  │  └─ useChatFilters.ts
-│  │  ├─ index.css
-│  │  ├─ main.jsx
-│  │  ├─ pages
-│  │  │  ├─ Chat.jsx
-│  │  │  ├─ Explore.jsx
-│  │  │  ├─ History.jsx
-│  │  │  ├─ Home.jsx
-│  │  │  ├─ Login.jsx
-│  │  │  └─ Register.jsx
-│  │  ├─ services
-│  │  │  ├─ auth.ts
-│  │  │  └─ AuthContext.jsx
-│  │  ├─ types
-│  │  │  └─ index.ts
-│  │  └─ utils
-│  │     └─ formaters.ts
-│  └─ vite.config.js
-├─ package-lock.json
-├─ README.md
-└─ run_servers.py
-
+├── back
+│   ├── .env.test
+│   ├── README.md
+│   ├── jest.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── app.ts
+│   │   ├── config
+│   │   │   └── db.ts
+│   │   ├── consumer
+│   │   │   └── OllamaConsumer.ts
+│   │   ├── controllers
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── chat.controller.ts
+│   │   │   ├── message.controller.ts
+│   │   │   ├── ollama.controller.ts
+│   │   │   └── subject.controller.ts
+│   │   ├── core
+│   │   │   └── MessageBus.ts
+│   │   ├── index.ts
+│   │   ├── middleware
+│   │   │   ├── auth.middleware.ts
+│   │   │   ├── error.middleware.ts
+│   │   │   └── logger.middleware.ts
+│   │   ├── models
+│   │   │   ├── chat.model.ts
+│   │   │   ├── message.model.ts
+│   │   │   ├── subject.model.ts
+│   │   │   └── user.model.ts
+│   │   ├── repositories
+│   │   │   ├── chat.repository.ts
+│   │   │   ├── message.repository.ts
+│   │   │   ├── subject.repository.ts
+│   │   │   └── user.repository.ts
+│   │   ├── routes
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── chat.routes.ts
+│   │   │   ├── message.routes.ts
+│   │   │   ├── ollama.routes.ts
+│   │   │   └── subject.routes.ts
+│   │   ├── services
+│   │   │   ├── auth.service.ts
+│   │   │   ├── chat.service.ts
+│   │   │   ├── message.service.ts
+│   │   │   ├── ollama.service.ts
+│   │   │   └── subject.service.ts
+│   │   ├── test
+│   │   │   └── test-server.ts
+│   │   ├── types
+│   │   │   ├── auth-types.ts
+│   │   │   ├── custom-error.ts
+│   │   │   └── types.d.ts
+│   │   ├── utils
+│   │   │   ├── bcrypt.ts
+│   │   │   └── jwt.ts
+│   │   └── validation
+│   │       └── auth.validator.ts
+│   ├── tests
+│   │   ├── integration
+│   │   │   └── routes
+│   │   │       └── auth.routes.test.ts
+│   │   └── unit
+│   │       └── services
+│   │           └── auth.service.test.ts
+│   └── tsconfig.json
+├── front
+│   ├── README.md
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── components
+│   │   │   ├── ChatList.tsx
+│   │   │   ├── ChatMain.jsx
+│   │   │   ├── EmptyState.tsx
+│   │   │   ├── Filter
+│   │   │   │   ├── FilterBar.tsx
+│   │   │   │   ├── FilterDropdown.tsx
+│   │   │   │   ├── SearchBar.tsx
+│   │   │   │   └── SearchFilterBar.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── HistoryChat.tsx
+│   │   │   ├── LoadingIndicator.tsx
+│   │   │   ├── LoginForm.jsx
+│   │   │   ├── RegisterForm.jsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   ├── SubjectCard.tsx
+│   │   │   └── SubjectsSection.tsx
+│   │   ├── hooks
+│   │   │   └── useChatFilters.ts
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages
+│   │   │   ├── Chat.jsx
+│   │   │   ├── Explore.jsx
+│   │   │   ├── History.jsx
+│   │   │   ├── Home.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Register.jsx
+│   │   ├── services
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── auth.ts
+│   │   ├── types
+│   │   │   └── index.ts
+│   │   └── utils
+│   │       └── formaters.ts
+│   └── vite.config.js
+├── package-lock.json
+├── .gitignore
+├── README.md
+└── run_servers.py
 ```
