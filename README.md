@@ -24,11 +24,11 @@
 ---
 
 ### Descrição do Projeto
-
+  O Stud.IA visa desenvolver uma plataforma web com inteligência artificial para auxiliar alunos do ensino médio no estudo de matérias escolares.
 ---
 
 ### Objetivo
-
+Seu objetivo principal é tornar o aprendizado acessível e adaptativo, com modos de estudo ajustáveis ao perfil do aluno.
 ---
 
 ### Pré-requisitos
