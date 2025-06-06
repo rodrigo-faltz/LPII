@@ -10,7 +10,7 @@
 4. [Páginas](#páginas)
 5. [Componentes](#componentes)
 6. [Serviços](#serviços)
-
+7. [Filtros](#filtros)
 ---
 ## Descrição
 O front-end do projeto consiste em uma aplicação web responsiva desenvolvida em React, que integra um chatbot inteligente para auxiliar estudantes do ensino médio em suas disciplinas curriculares (Matemática, Português, Ciências, etc.). A interface é projetada para ser intuitiva, acessível e focada na interação natural com o assistente virtual.
@@ -603,7 +603,10 @@ Esse serviço é um utilitário simples para controlar login, logout e checagem 
       * Hook `useAuth()`
         Facilita o consumo do contexto; basta chamá-lo em qualquer componente para obter o status de autenticação e as funções de login/logout.
       
-      
+      ---
+    # Filtros
+
+Esse conjunto de arquivos implementa a barra de busca, filtro e ordenação do histórico de conversas. O componente SearchFilterBar agrupa três controles       responsivos: um campo de pesquisa (SearchBar) que captura texto livre, um seletor genérico (FilterDropdown) para filtrar por matéria e outro seletor para ordenar (mais recentes ou mais antigos). O hook useChatFilters recebe a lista bruta de chats, o termo digitado, o filtro de matéria e a ordem escolhida, aplica tudo em tempo real (filtro por matéria, busca pelo termo na matéria ou na última mensagem e ordenação cronológica) e devolve a coleção já filtrada e ordenada, além de setters para que os controles da barra atualizem o estado. Em conjunto, esses componentes fornecem uma interface reutilizável para pesquisar, filtrar e classificar as conversas, destacando apenas os resultados que correspondem aos critérios do usuário.
       
       
       
