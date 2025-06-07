@@ -79,7 +79,7 @@ Abaixo possui a documentação do backend e frontend, que serve para preparar o 
 * [Documentação do Back-end](https://github.com/rodrigo-faltz/LPII/blob/main/back/README.md)
 * [Documentação do Front-end](https://github.com/rodrigo-faltz/LPII/blob/main/front/README.md)
 
-4. **Execute o script:**
+3. **Execute o script:**
 
 ```bash
 python run_servers.py
