@@ -1,159 +1,74 @@
-# ECM252 – Linguagens de Programação II
-# ECM516 – Arquitetura de Sistemas Computacionais
+# 🎓 Stud.IA – Sua Nova Forma de Estudar com Inteligência Artificial
 
-## Projeto T1 das Disciplinas Linguagens de Programação II e Arquitetura de Sistemas Computacionais
+## 📚 Projeto T1 – ECM252 e ECM516
 
-### Membros do Grupo:
-
-- Amanda Carolina Ambrizzi Ramin; 22.00721-0
-
-- André Felipe Silva Xavier; 22.01339-3
-
-- Otto Camargo Kuchkarian; 22.00571-4
-
-- Rafael Assanti; 22.01464-0
-
-- Rodrigo Fernandes Faltz; 21.01660-7
-
-### Índice
-1. [Descrição do Projeto](#descrição-do-projeto)
-2. [Objetivo](#objetivo)
-3. [Pré-requisitos](#pré-requisitos)  
-4. [Como Usar](#como-usar)  
+### Disciplinas:
+- ECM252 – Linguagens de Programação II  
+- ECM516 – Arquitetura de Sistemas Computacionais
 
 ---
 
-### Descrição do Projeto
-  O Stud.IA visa desenvolver uma plataforma web com inteligência artificial para auxiliar alunos do ensino médio no estudo de matérias escolares.
----
+## 👥 Membros do Grupo
 
-### Objetivo
-Seu objetivo principal é tornar o aprendizado acessível e adaptativo, com modos de estudo ajustáveis ao perfil do aluno.
----
-
-### Pré-requisitos
+- **Amanda Carolina Ambrizzi Ramin** – RA: 22.00721-0  
+- **André Felipe Silva Xavier** – RA: 22.01339-3  
+- **Otto Camargo Kuchkarian** – RA: 22.00571-4  
+- **Rafael Assanti** – RA: 22.01464-0  
+- **Rodrigo Fernandes Faltz** – RA: 21.01660-7  
 
 ---
 
-### Como usar
+## 📖 Descrição do Projeto
+
+O **Stud.IA** é uma plataforma web inovadora que utiliza **inteligência artificial** para transformar a forma como alunos do **ensino médio** estudam. Por meio de **chats organizados por matérias e conteúdos**, a aplicação oferece explicações detalhadas, exercícios interativos e suporte instantâneo, promovendo um aprendizado mais dinâmico e personalizado.
+
+O diferencial da plataforma está na capacidade de **se adaptar ao perfil de cada aluno**, oferecendo conteúdo sob medida com base nas suas interações. Além disso, o sistema foi projetado com foco em **acessibilidade**, **usabilidade** e **responsividade**, garantindo que todos os estudantes possam usá-lo com facilidade, em qualquer dispositivo.
 
 ---
 
-```
-LPII
-├── back
-│   ├── .env.test
-│   ├── README.md
-│   ├── jest.config.js
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── src
-│   │   ├── app.ts
-│   │   ├── config
-│   │   │   └── db.ts
-│   │   ├── consumer
-│   │   │   └── OllamaConsumer.ts
-│   │   ├── controllers
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── chat.controller.ts
-│   │   │   ├── message.controller.ts
-│   │   │   ├── ollama.controller.ts
-│   │   │   └── subject.controller.ts
-│   │   ├── core
-│   │   │   └── MessageBus.ts
-│   │   ├── index.ts
-│   │   ├── middleware
-│   │   │   ├── auth.middleware.ts
-│   │   │   ├── error.middleware.ts
-│   │   │   └── logger.middleware.ts
-│   │   ├── models
-│   │   │   ├── chat.model.ts
-│   │   │   ├── message.model.ts
-│   │   │   ├── subject.model.ts
-│   │   │   └── user.model.ts
-│   │   ├── repositories
-│   │   │   ├── chat.repository.ts
-│   │   │   ├── message.repository.ts
-│   │   │   ├── subject.repository.ts
-│   │   │   └── user.repository.ts
-│   │   ├── routes
-│   │   │   ├── auth.routes.ts
-│   │   │   ├── chat.routes.ts
-│   │   │   ├── message.routes.ts
-│   │   │   ├── ollama.routes.ts
-│   │   │   └── subject.routes.ts
-│   │   ├── services
-│   │   │   ├── auth.service.ts
-│   │   │   ├── chat.service.ts
-│   │   │   ├── message.service.ts
-│   │   │   ├── ollama.service.ts
-│   │   │   └── subject.service.ts
-│   │   ├── test
-│   │   │   └── test-server.ts
-│   │   ├── types
-│   │   │   ├── auth-types.ts
-│   │   │   ├── custom-error.ts
-│   │   │   └── types.d.ts
-│   │   ├── utils
-│   │   │   ├── bcrypt.ts
-│   │   │   └── jwt.ts
-│   │   └── validation
-│   │       └── auth.validator.ts
-│   ├── tests
-│   │   ├── integration
-│   │   │   └── routes
-│   │   │       └── auth.routes.test.ts
-│   │   └── unit
-│   │       └── services
-│   │           └── auth.service.test.ts
-│   └── tsconfig.json
-├── front
-│   ├── README.md
-│   ├── eslint.config.js
-│   ├── index.html
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── src
-│   │   ├── App.css
-│   │   ├── App.jsx
-│   │   ├── components
-│   │   │   ├── ChatList.tsx
-│   │   │   ├── ChatMain.jsx
-│   │   │   ├── EmptyState.tsx
-│   │   │   ├── Filter
-│   │   │   │   ├── FilterBar.tsx
-│   │   │   │   ├── FilterDropdown.tsx
-│   │   │   │   ├── SearchBar.tsx
-│   │   │   │   └── SearchFilterBar.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── HistoryChat.tsx
-│   │   │   ├── LoadingIndicator.tsx
-│   │   │   ├── LoginForm.jsx
-│   │   │   ├── RegisterForm.jsx
-│   │   │   ├── Sidebar.tsx
-│   │   │   ├── SubjectCard.tsx
-│   │   │   └── SubjectsSection.tsx
-│   │   ├── hooks
-│   │   │   └── useChatFilters.ts
-│   │   ├── index.css
-│   │   ├── main.jsx
-│   │   ├── pages
-│   │   │   ├── Chat.jsx
-│   │   │   ├── Explore.jsx
-│   │   │   ├── History.jsx
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   └── Register.jsx
-│   │   ├── services
-│   │   │   ├── AuthContext.jsx
-│   │   │   └── auth.ts
-│   │   ├── types
-│   │   │   └── index.ts
-│   │   └── utils
-│   │       └── formaters.ts
-│   └── vite.config.js
-├── package-lock.json
-├── .gitignore
-├── README.md
-└── run_servers.py
-```
+## 💡 Funcionalidades Principais
+
+- **📚 Chat inteligente por matéria e conteúdo:** IA treinada para responder dúvidas em disciplinas escolares como Matemática, Física, História, Química, Biologia e muito mais, organizadas por temas e tópicos.
+- **🧠 Estudo adaptativo:** Sugestões e ajustes no conteúdo com base no perfil do aluno.
+
+---
+
+## 🎯 Qual o benefício de usar o Stud.IA?
+
+Estudar com o **Stud.IA** é como ter um professor disponível 24 horas por dia, pronto para responder suas dúvidas e adaptar o conteúdo ao seu estilo de aprendizado.
+
+A plataforma é ideal para quem deseja:
+
+- Se preparar para provas e vestibulares;
+- Aprender no próprio ritmo;
+- Ter acesso a recursos didáticos modernos e acessíveis;
+- Registrar o progresso e revisar conteúdos com facilidade.
+
+---
+
+## 🧩 Objetivo do Projeto
+
+Desenvolver uma solução web escalável e modular, com integração de **serviços de IA** e uma arquitetura baseada em boas práticas de engenharia de software. O projeto visa não apenas apoiar estudantes, mas também demonstrar competências práticas em desenvolvimento back-end, front-end, comunicação assíncrona (RabbitMQ) e modelagem de banco de dados.
+
+---
+
+## 🔧 Dependências
+
+Antes de executar o projeto, certifique-se de ter os seguintes softwares instalados:
+
+- [Node.js](https://nodejs.org/)
+- [MySQL](https://www.mysql.com/downloads/)
+- [RabbitMQ](https://www.rabbitmq.com/download.html)
+- [Ollama (modelo local de IA)](https://ollama.com/)
+- React (via ```npm install```  incluído no ```front/package.json```)
+- Vite (ferramenta de build e dev server para o React)
+
+---
+
+## ▶️ Como Executar o Projeto
+
+1. **Clone o repositório:**
+
+```bash
+git clone https://github.com/seu-usuario/LPII.git
+cd LPII
