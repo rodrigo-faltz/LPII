@@ -6,11 +6,13 @@
 ### Índice
 1. [Descrição](#descrição)
 2. [Diretório](#diretório)
-3. [Arquivos Iniciais](#arquivos-iniciais)
-4. [Páginas](#páginas)
-5. [Componentes](#componentes)
-6. [Serviços](#serviços)
-7. [Filtros](#filtros)
+3. [Como Rodar o Projeto](#como-rodar-o-projeto)
+4. [Arquivos Iniciais](#arquivos-iniciais)
+5. [Páginas](#páginas)
+6. [Componentes](#componentes)
+7. [Serviços](#serviços)
+8. [Filtros](#filtros)
+
 ---
 ## Descrição
 O front-end do projeto consiste em uma aplicação web responsiva desenvolvida em React, que integra um chatbot inteligente para auxiliar estudantes do ensino médio em suas disciplinas curriculares (Matemática, Português, Ciências, etc.). A interface é projetada para ser intuitiva, acessível e focada na interação natural com o assistente virtual.
@@ -25,6 +27,34 @@ O front-end do projeto consiste em uma aplicação web responsiva desenvolvida e
 | CSS Modules        | Estilização modularizada dos componentes.                |
 | Vite               | Ferramenta moderna para desenvolvimento e build.         |
 | Bootstrap          | Fornece classes CSS prontas para estilizar elementos HTML, como botões, tabelas, formulários, entre outros.|
+
+---
+## Como Rodar o Projeto
+
+1. Instale as dependências:
+
+```bash
+npm install
+```
+
+2. Configure as variáveis de ambiente em .env:
+
+```.env
+DB_NAME = yourdb_test
+DB_USER = testuser
+DB_PASSWORD = testpassword
+DB_HOST = localhost
+```
+
+3. Rode o projeto em desenvolvimento:
+
+```bash
+python run_servers.py
+```
+
+Ao executar o script ```run_servers.py```, tanto o back-end quanto front-end da aplicação serão iniciados automaticamente,
+deixando o sistema pronto para uso imediato pelos usuários.
+
 ---
 
 ## Diretório
