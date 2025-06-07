@@ -84,14 +84,13 @@ DB_HOST = localhost
 3. Rode o projeto em desenvolvimento:
 
 ```bash
-npm run dev
+python run_servers.py
 ```
 
-4. Execute os testes:
+Ao executar o script ```run_servers.py```, tanto o back-end quanto front-end da aplicação serão iniciados automaticamente,
+deixando o sistema pronto para uso imediato pelos usuários.
 
-```bash
-npm run test
-```
+---
 
 ## Diretório
 <pre>
