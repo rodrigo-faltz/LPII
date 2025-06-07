@@ -72,3 +72,15 @@ Antes de executar o projeto, certifique-se de ter os seguintes softwares instala
 ```bash
 git clone https://github.com/seu-usuario/LPII.git
 cd LPII
+```
+
+2. **Prepare o ambiente:**
+Abaixo possui a documentação do backend e frontend, que serve para preparar o ambiente:
+* [Documentação do Back-end](https://github.com/rodrigo-faltz/LPII/blob/main/back/README.md)
+* [Documentação do Front-end](https://github.com/rodrigo-faltz/LPII/blob/main/front/README.md)
+
+4. **Execute o script:**
+
+```bash
+python run_servers.py
+```
