@@ -66,29 +66,49 @@ O backend possui testes automatizados usando Jest para garantir a confiabilidade
 
 ## Como Rodar o Projeto
 
-1. Instale as dependências:
-
+1. Instale as dependências do projeto
+Certifique-se de ter o Node.js e o Python instalados. Em seguida, execute:
 ```bash
 npm install
 ```
 
-2. Configure as variáveis de ambiente em .env:
-
+2. Configure as variáveis de ambiente
+Crie um arquivo .env na raiz do projeto e defina as variáveis conforme necessário:
 ```.env
-DB_NAME = yourdb_test
-DB_USER = testuser
-DB_PASSWORD = testpassword
-DB_HOST = localhost
+PORT=3000
+DB_HOST=localhost
+DB_USER=appjarvis
+DB_PASSWORD=secure_password
+DB_NAME=jarvisapp
+JWT_SECRET=your-strong-secret-key
 ```
 
-3. Rode o projeto em desenvolvimento:
+3. Configure o banco de dados MySQL
+  No seu ambiente MySQL:
+  * Execute o script `SQL` fornecido (`.sql`) para criar o banco de dados e as tabelas necessárias.
+  * Conceda as permissões adequadas ao usuário definido na variável `DB_USER`.
+
+4. Configure o RabbitMQ
+  Para configurar o RabbitMQ:
+  1. Instale o RabbitMQ em seu sistema.
+  2. Inicie o serviço RabbitMQ.
+  3. Verifique se ele está acessível pelas portas padrão:
+
+5. Prepare o Ollama
+Para rodar o modelo local com o Ollama:
+
+```bash
+ollama run gemma3:4b
+```
+
+6. Inicie o sistema
+Execute o script Python que inicializa todos os servidores:
 
 ```bash
 python run_servers.py
 ```
 
-Ao executar o script ```run_servers.py```, tanto o back-end quanto front-end da aplicação serão iniciados automaticamente,
-deixando o sistema pronto para uso imediato pelos usuários.
+Isso iniciará automaticamente tanto o back-end quanto o front-end da aplicação, deixando o sistema pronto para uso.
 
 ---
 
