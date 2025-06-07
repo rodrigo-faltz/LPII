@@ -37,16 +37,7 @@ O front-end do projeto consiste em uma aplicação web responsiva desenvolvida e
 npm install
 ```
 
-2. Configure as variáveis de ambiente em .env:
-
-```.env
-DB_NAME = yourdb_test
-DB_USER = testuser
-DB_PASSWORD = testpassword
-DB_HOST = localhost
-```
-
-3. Rode o projeto em desenvolvimento:
+2. Rode o projeto em desenvolvimento:
 
 ```bash
 python run_servers.py
