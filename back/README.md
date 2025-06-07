@@ -90,9 +90,9 @@ JWT_SECRET=your-strong-secret-key
 
 4. Configure o RabbitMQ
   Para configurar o RabbitMQ:
-  1. Instale o RabbitMQ em seu sistema.
-  2. Inicie o serviço RabbitMQ.
-  3. Verifique se ele está acessível pelas portas padrão:
+  * Instale o RabbitMQ em seu sistema.
+  * Inicie o serviço RabbitMQ.
+  * Verifique se ele está acessível pelas portas padrão.
 
 5. Prepare o Ollama
 Para rodar o modelo local com o Ollama:
